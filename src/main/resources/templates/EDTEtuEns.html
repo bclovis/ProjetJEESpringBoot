@@ -8,13 +8,6 @@
 <body>
 <h1>Emploi du Temps</h1>
 
-<div th:if="${role != null}">
-  Role: [[${role}]]
-</div>
-<div th:if="${role == null}">
-  Role not defined.
-</div>
-
 
 <!-- Formulaire pour changer de semaine -->
 <form method="get" th:action="@{/AfficherEDTEtuEns}">
