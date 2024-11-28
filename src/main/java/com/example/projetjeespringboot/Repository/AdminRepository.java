@@ -1,6 +1,6 @@
-package com.example.projetjeespringboot.Repository;
+package com.example.projetjeespringboot.repository;
 
-import com.example.projetjeespringboot.Model.Admin;
+import com.example.projetjeespringboot.model.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdminRepository extends JpaRepository<Admin, String> {

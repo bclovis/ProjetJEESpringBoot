@@ -1,7 +1,7 @@
-package com.example.projetjeespringboot.Service;
+package com.example.projetjeespringboot.service;
 
-import com.example.projetjeespringboot.Model.Etudiant;
-import com.example.projetjeespringboot.Repository.EtudiantRepository;
+import com.example.projetjeespringboot.model.Etudiant;
+import com.example.projetjeespringboot.repository.EtudiantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

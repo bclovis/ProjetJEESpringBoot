@@ -1,6 +1,6 @@
-package com.example.projetjeespringboot.Repository;
+package com.example.projetjeespringboot.repository;
 
-import com.example.projetjeespringboot.Model.Enseignant;
+import com.example.projetjeespringboot.model.Enseignant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EnseignantRepository extends JpaRepository<Enseignant,String> {

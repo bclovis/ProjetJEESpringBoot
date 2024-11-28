@@ -1,7 +1,7 @@
-package com.example.projetjeespringboot.Service;
+package com.example.projetjeespringboot.service;
 
-import com.example.projetjeespringboot.Model.Enseignant;
-import com.example.projetjeespringboot.Repository.EnseignantRepository;
+import com.example.projetjeespringboot.model.Enseignant;
+import com.example.projetjeespringboot.repository.EnseignantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +21,19 @@ public class EnseignantService {
         //
     }
     */
+
+    // Méthode pour valider l'authentification d'un enseignant
+    public Enseignant validateLogin(String email, String password) {
+        // Cherche un enseignant par son email
+        Enseignant enseignant = enseignantRepository.findByEmail(email);
+
+        // Si un enseignant est trouvé et que les mots de passe correspondent
+        if (enseignant != null && enseignant.getMdp().equals(password)) {
+            return enseignant;  // Retourner l'enseignant si la validation réussit
+        }
+
+        return null;  // Retourner null si les informations sont incorrectes
+    }
 
     public void deleteEnseignantById(String enseignantId)
     {
