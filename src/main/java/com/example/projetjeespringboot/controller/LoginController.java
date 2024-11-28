@@ -42,7 +42,7 @@ public class LoginController {
 
             // Rediriger vers la page appropriée en fonction du rôle
             if ("admin".equals(role)) {
-                return "admin.html";  // Page pour l'admin
+                return "admin";  // Page pour l'admin (admin.html)
             } else if ("enseignant".equals(role)) {
                 return "enseignant_dashboard";  // Page pour l'enseignant
             } else {
