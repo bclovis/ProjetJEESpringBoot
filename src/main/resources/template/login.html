@@ -1,46 +1,38 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Connexion</title>
-  <link rel="stylesheet" href="static/login.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <title>Login</title>
+  <!-- Utilisation de th:href pour charger le CSS depuis le répertoire /static -->
+  <link rel="stylesheet" th:href="@{/css/login.css}">
+
 </head>
 <body>
-<img src="Logo_Projet_JEE.PNG" alt="Logo" class="logo">
-<h2>Log In</h2>
-<form action="login" method="post">
-  <div class="form-group">
+<div class="login-container">
+  <h2>Connexion</h2>
+
+  <!-- Affichage du message d'erreur en cas d'échec de connexion -->
+  <div th:if="${error}" class="error-message">
+    <p th:text="${error}"></p>
+  </div>
+
+  <form th:action="@{/login}" method="post">
     <label for="email">Email :</label>
-    <input type="email" id="email" name="email" required>
-    <br><br>
-  </div>
+    <input type="email" id="email" name="email" required><br><br>
 
-  <div class="form-group">
     <label for="password">Mot de passe :</label>
-    <input type="password" id="password" name="password" required>
-    <br><br>
-  </div>
+    <input type="password" id="password" name="password" required><br><br>
 
-
-  <div class="radio-group">
-    <label>Rôle :</label>
+    <label>Rôle :</label><br>
+    <input type="radio" id="admin" name="role" value="admin" required>
+    <label for="admin">Admin</label><br>
+    <input type="radio" id="enseignant" name="role" value="enseignant" required>
+    <label for="enseignant">Enseignant</label><br>
     <input type="radio" id="etudiant" name="role" value="etudiant" required>
-    <label for="etudiant">Étudiant</label>
+    <label for="etudiant">Etudiant</label><br><br>
 
-    <input type="radio" id="enseignant" name="role" value="enseignant">
-    <label for="enseignant">Enseignant</label>
-
-    <input type="radio" id="admin" name="role" value="admin">
-    <label for="admin">Administrateur</label>
-    <br><br>
-  </div>
-
-  <button type="submit">Se connecter</button>
-</form>
-<%-- Affichage d'un message d'erreur si la connexion échoue --%>
-<c:if test="${not empty errorMessage}">
-  <p style="color: red;">${errorMessage}</p>
-</c:if>
+    <button type="submit">Se connecter</button>
+  </form>
+</div>
 </body>
 </html>
