@@ -12,8 +12,8 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@Table(name = "enseignant")
-public class Enseignant {
+@Table(name = "etudiant")
+public class Etudiant {
     @Id
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -30,9 +30,12 @@ public class Enseignant {
     @Column(name = "mdp", nullable = false)
     private String mdp;
 
+    @Column(name = "filiere", nullable = false)
+    private String filiere;
+
     // Constructeurs
-    public Enseignant() {}
-    public Enseignant(String email, String nom, String prenom, LocalDate dateNaissance, String mdp) {
+    public Etudiant() {}
+    public Etudiant(String email, String nom, String prenom, LocalDate dateNaissance, String mdp) {
         this.email = email;
         this.nom = nom;
         this.prenom = prenom;
