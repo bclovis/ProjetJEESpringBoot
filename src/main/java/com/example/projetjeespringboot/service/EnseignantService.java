@@ -7,20 +7,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EnseignantService {
+
     @Autowired
     private EnseignantRepository enseignantRepository;
-
-    public Enseignant saveEnseignant(Enseignant enseignant)
-    {
-        return enseignantRepository.save(enseignant);
-    }
-
-    /*
-    public Enseignant updateEnseignant(Enseigantn enseignant, String enseignantId)
-    {
-        //
-    }
-    */
 
     // Méthode pour valider l'authentification d'un enseignant
     public Enseignant validateLogin(String email, String password) {
@@ -35,8 +24,5 @@ public class EnseignantService {
         return null;  // Retourner null si les informations sont incorrectes
     }
 
-    public void deleteEnseignantById(String enseignantId)
-    {
-        enseignantRepository.deleteById(enseignantId);
-    }
+    // Autres méthodes pour gérer les enseignants peuvent être ajoutées ici...
 }

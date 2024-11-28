@@ -7,25 +7,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdminService {
+
+    // Injecter le repository Admin pour accéder aux données
     @Autowired
     private AdminRepository adminRepository;
-
-    public Admin saveAdmin(Admin admin)
-    {
-        return adminRepository.save(admin);
-    }
-
-    /*
-    public Admin updateAdmin(Admin admin, String adminId)
-    {
-        //
-    }
-    */
-
-    public void deleteAdminById(String adminId)
-    {
-        adminRepository.deleteById(adminId);
-    }
 
     // Méthode pour valider un admin par email et mot de passe
     public Admin validateLogin(String email, String password) {
@@ -38,5 +23,10 @@ public class AdminService {
         }
 
         return null; // Retourner null si l'authentification échoue
+    }
+
+    // Méthode pour ajouter un nouvel administrateur (si nécessaire)
+    public Admin addAdmin(Admin admin) {
+        return adminRepository.save(admin); // Sauvegarder l'admin dans la base de données
     }
 }

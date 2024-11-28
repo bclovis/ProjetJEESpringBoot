@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Espace Administrateur</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<!-- Barre de navigation -->
+<div class="header">
+    <img src="/static/images/Logo_Projet_JEE.PNG" alt="Logo Université" class="logo">
+    <div class="icons">
+        <span class="icon"><i class="fa-solid fa-circle-user"></i></span>  <!-- Icône du compte utilisateur -->
+        <form class="logout-form" action="#" th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" class="icon" title="Déconnexion">
+                <i class="fa-solid fa-power-off"></i> <!-- Icône de déconnexion -->
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Mise en page principale -->
+<div class="main-content">
+    <!-- Menu latéral gauche -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="#" th:data-page="gererDemandes">Gérer les demandes de filière</a></li>
+            <li><a href="#" th:data-page="creationCompte">Création de comptes</a></li>
+            <li>
+                <a href="#" th:data-toggle="submenu" onclick="deroulerSubmenu(event)">Gérer le personnel</a>
+                <ul class="submenu" style="display: none;">
+                    <li><a href="#" th:data-page="gererEtudiants">Gérer les étudiants</a></li>
+                    <li><a href="#" th:data-page="gererEnseignants">Gérer les enseignants</a></li>
+                </ul>
+            </li>
+            <li><a href="#" th:data-page="AssocierProfesseurMatiereServlet">Associer un Professeur à une Matière</a></li>
+            <li><a href="#" th:data-page="emploiDuTemps">Voir Emploi du temps</a></li>
+        </ul>
+    </nav>
+
+    <!-- Zone de contenu principale -->
+    <div class="content-area">
+        <h1 id="default-message">Bienvenue dans l'espace administrateur</h1>
+        <p id="default-message-paragraph">Sélectionnez une option à gauche pour afficher les informations.</p>
+        <div id="dynamic-content"></div>
+    </div>
+</div>
+
+<script>
+    // Fonction pour gérer le chargement dynamique des pages
+    function loadPage(page) {
+        fetch(page)
+            .then(response => response.text())
+            .then(html => {
+                // Remplir la zone dynamique avec le contenu de la page
+                document.getElementById('dynamic-content').innerHTML = html;
+            })
+            .catch(err => console.error('Erreur lors du chargement de la page :', err));
+    }
+
+    function deroulerSubmenu(event) {
+        event.preventDefault(); // Empêche le lien de rediriger
+        const submenu = event.target.nextElementSibling; // Sélectionne le sous-menu (ul)
+        if (submenu) {
+            submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+
+    // Ajoute un écouteur d'événement à chaque lien du menu
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            const isSubmenuToggle = this.getAttribute('data-toggle') === 'submenu';
+            if (isSubmenuToggle) {
+                // Ne pas exécuter la logique AJAX pour les sous-menus
+                return;
+            }
+
+            e.preventDefault(); // Empêche le comportement par défaut
+            const page = this.getAttribute('data-page'); // Récupère le nom de la page
+            if (page) {
+                loadPage(page); // Charger la page via AJAX
+            }
+        });
+    });
+</script>
+</body>
+</html>

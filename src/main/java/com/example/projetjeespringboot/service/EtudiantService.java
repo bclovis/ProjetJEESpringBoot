@@ -7,23 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EtudiantService {
+
     @Autowired
     private EtudiantRepository etudiantRepository;
 
-    public Etudiant saveEtudiant(Etudiant etudiant)
-    {
-        return etudiantRepository.save(etudiant);
-    }
-
-    /*
-    public Etudiant updateEtudiant(Etudiant etudiant, String etudiantId)
-    {
-        //
-    }
-    */
-
-    public void deleteEtudiantById(String etudiantId)
-    {
-        etudiantRepository.deleteById(etudiantId);
+    // Méthode pour valider la connexion de l'étudiant
+    public Etudiant validateLogin(String email, String password) {
+        Etudiant etudiant = etudiantRepository.findByEmail(email);
+        if (etudiant != null && etudiant.getMdp().equals(password)) {
+            return etudiant;  // Retourne l'étudiant si l'email et le mot de passe sont valides
+        }
+        return null;  // Retourne null si l'authentification échoue
     }
 }
