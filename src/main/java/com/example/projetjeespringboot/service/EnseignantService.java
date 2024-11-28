@@ -5,28 +5,24 @@ import com.example.projetjeespringboot.repository.EnseignantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class EnseignantService {
 
     @Autowired
     private EnseignantRepository enseignantRepository;
 
-    public List<Enseignant> getAllEnseignants() {
-        return enseignantRepository.findAll();
+    // Méthode pour valider l'authentification d'un enseignant
+    public Enseignant validateLogin(String email, String password) {
+        // Cherche un enseignant par son email
+        Enseignant enseignant = enseignantRepository.findByEmail(email);
+
+        // Si un enseignant est trouvé et que les mots de passe correspondent
+        if (enseignant != null && enseignant.getMdp().equals(password)) {
+            return enseignant;  // Retourner l'enseignant si la validation réussit
+        }
+
+        return null;  // Retourner null si les informations sont incorrectes
     }
 
-    public Optional<Enseignant> getEnseignantByEmail(String email) {
-        return enseignantRepository.findById(email);
-    }
-
-    public Enseignant saveEnseignant(Enseignant enseignant) {
-        return enseignantRepository.save(enseignant);
-    }
-
-    public void deleteEnseignant(String email) {
-        enseignantRepository.deleteById(email);
-    }
+    // Autres méthodes pour gérer les enseignants peuvent être ajoutées ici...
 }

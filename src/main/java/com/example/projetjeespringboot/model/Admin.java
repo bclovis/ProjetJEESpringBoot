@@ -1,10 +1,13 @@
-package com.example.projetjeespringboot.model;  // Package adapté au contexte Spring Boot
+package com.example.projetjeespringboot.model;
 
-import jakarta.persistence.*;  // On utilise javax.persistence pour JPA standard
-import java.util.Date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import java.sql.Date;
 
 @Entity
-@Table(name = "admin")  // Nom de la table en minuscule par convention
+@Table(name = "Admin")
 public class Admin {
 
     @Id
@@ -17,8 +20,7 @@ public class Admin {
     @Column(name = "prenom", nullable = false)
     private String prenom;
 
-    @Temporal(TemporalType.DATE)  // On utilise @Temporal pour bien gérer le type Date sans l'heure
-    @Column(name = "date_naissance", nullable = false)  // Conventions snake_case
+    @Column(name = "dateNaissance", nullable = false)
     private Date dateNaissance;
 
     @Column(name = "mdp", nullable = false)

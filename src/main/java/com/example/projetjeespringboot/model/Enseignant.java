@@ -1,7 +1,10 @@
-package com.example.projetjeespringboot.model;
+package com.example.projetjeespringboot.model; // Change le package à la bonne convention
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import java.time.LocalDate; // Utilisation de LocalDate au lieu de Date
 
 @Entity
 @Table(name = "Enseignant")
@@ -18,7 +21,7 @@ public class Enseignant {
     private String prenom;
 
     @Column(name = "dateNaissance", nullable = false)
-    private LocalDate dateNaissance;
+    private LocalDate dateNaissance; // Utilisation de LocalDate pour gérer les dates sans heure
 
     @Column(name = "mdp", nullable = false)
     private String mdp;
