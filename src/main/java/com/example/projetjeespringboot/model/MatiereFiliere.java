@@ -3,7 +3,7 @@ package com.example.projetjeespringboot.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "MatiereFiliere")
+@Table(name = "Matiere_filiere")
 public class MatiereFiliere {
 
     @Id

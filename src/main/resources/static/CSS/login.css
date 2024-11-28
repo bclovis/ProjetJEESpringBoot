@@ -1,43 +1,69 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.login-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-}
-
-h2 {
-    text-align: center;
-}
-
-label {
-    font-size: 14px;
+/* Style pour l'image logo */
+.logo {
     display: block;
-    margin-bottom: 5px;
+    margin: 3% auto;
+    max-width: 150px; /* Ajustez selon la taille souhaitée */
+    height: auto;
+    margin-bottom: 20px;
 }
 
-input[type="text"],
-input[type="password"],
-select {
-    width: 100%;
+/* Assure que le titre et le formulaire sont sur des lignes distinctes */
+h2 {
+    font-family: 'Poppins', sans-serif; /* Applique la police Poppins */
+    color: skyblue;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Centrage et mise en page du formulaire */
+form {
+    width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Aligne chaque champ et label en ligne */
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+/* Label et input en face à face */
+label {
+    flex: 1;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+input[type="email"],
+input[type="password"] {
+    flex: 2;
     padding: 8px;
-    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
+/* Alignement des boutons radio avec leurs labels */
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.radio-group label {
+    display: inline;
+    margin: 0;
+}
+
 button {
-    width: 100%;
+    width: 100%; /* Bouton prend toute la largeur */
     padding: 10px;
     background-color: #4CAF50;
     color: white;
@@ -51,8 +77,9 @@ button:hover {
     background-color: #45a049;
 }
 
-.error-message {
+/* Message d'erreur */
+p {
     color: red;
-    font-size: 14px;
-    margin-bottom: 10px;
+    text-align: center;
+    margin-top: 10px;
 }

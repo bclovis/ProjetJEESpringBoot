@@ -2,8 +2,10 @@ package com.example.projetjeespringboot.controller;
 
 import com.example.projetjeespringboot.model.Admin;
 import com.example.projetjeespringboot.model.Enseignant;
+import com.example.projetjeespringboot.model.Etudiant;
 import com.example.projetjeespringboot.service.AdminService;
 import com.example.projetjeespringboot.service.EnseignantService;
+import com.example.projetjeespringboot.service.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,9 @@ public class LoginController {
 
     @Autowired
     private EnseignantService enseignantService;
+
+    @Autowired
+    private EtudiantService etudiantService;
 
     // Méthode GET pour afficher le formulaire de connexion
     @GetMapping("/login")
@@ -51,7 +56,15 @@ public class LoginController {
                 // Ajouter des informations de session pour l'enseignant
                 session.setAttribute("email", email);
                 session.setAttribute("role", role);
-                return "enseignant";  // Rediriger vers enseignant_dashboard.html
+                return "enseignant";  // Rediriger vers enseignant.html
+            }
+        } else if ("etudiant".equals(role)) {
+            Etudiant etudiant = etudiantService.validateLogin(email, password);
+            if (etudiant != null) {
+                // Ajouter des informations de session pour l'étudiant
+                session.setAttribute("email", email);
+                session.setAttribute("role", role);
+                return "etudiant";  // Rediriger vers etudiant.html
             }
         }
 

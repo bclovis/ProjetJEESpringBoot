@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface EmploiDuTempsRepository extends JpaRepository<EmploiDuTemps, Integer> {
-    List<EmploiDuTemps> findByFiliereEtudiantEmailAndSemaine(String email, int semaine);
-    List<EmploiDuTemps> findByProfesseurEmailAndSemaine(String email, int semaine);
-    List<EmploiDuTemps> findByFiliereAndSemaine(String filiere, int semaine);
+    // Méthode pour récupérer l'emploi du temps pour un étudiant ou un enseignant
+    List<EmploiDuTemps> findByFiliereNomAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(String filiere, int semaineDebut, int semaineFin);
+
+    List<EmploiDuTemps> findByProfesseurEmailAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(String email, int semaineDebut, int semaineFin);
 }

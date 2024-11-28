@@ -5,8 +5,9 @@ import com.example.projetjeespringboot.repository.EmploiDuTempsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 public class EmploiDuTempsService {
@@ -14,19 +15,38 @@ public class EmploiDuTempsService {
     @Autowired
     private EmploiDuTempsRepository emploiDuTempsRepository;
 
-    public EmploiDuTemps saveEmploiDuTemps(EmploiDuTemps emploiDuTemps) {
-        return emploiDuTempsRepository.save(emploiDuTemps);
-    }
+    public Map<String, Map<String, String>> getEmploiDuTemps(String role, String email, int semaine) {
+        List<EmploiDuTemps> emploiDuTemps;
+        Map<String, Map<String, String>> emploiParJourEtHeure = new HashMap<>();
 
-    public Optional<EmploiDuTemps> getEmploiDuTempsById(int id) {
-        return emploiDuTempsRepository.findById(id);
-    }
+        if ("etudiant".equals(role)) {
+            emploiDuTemps = emploiDuTempsRepository.findByFiliereNomAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
+                    "nomDeFiliere", semaine, semaine); // Remplacez "nomDeFiliere" par le bon nom
+        } else if ("enseignant".equals(role)) {
+            emploiDuTemps = emploiDuTempsRepository.findByProfesseurEmailAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
+                    email, semaine, semaine);
+        } else {
+            throw new IllegalArgumentException("Rôle utilisateur non valide : " + role);
+        }
 
-    public List<EmploiDuTemps> getAllEmploiDuTemps() {
-        return emploiDuTempsRepository.findAll();
-    }
+        // Organiser les données par jour et heure
+        for (EmploiDuTemps row : emploiDuTemps) {
+            String jour = row.getJour();
+            String heure = row.getHeure();
+            String cours = row.getMatiere().getNom();
+            String professeur = row.getProfesseur().getNom();
 
-    public void deleteEmploiDuTempsById(int id) {
-        emploiDuTempsRepository.deleteById(id);
+            String contenu = cours + " (" + professeur + ")";
+            emploiParJourEtHeure.putIfAbsent(jour, new HashMap<>());
+            emploiParJourEtHeure.get(jour).put(heure, contenu);
+        }
+
+        // Ajouter la pause de 12h à 14h
+        for (String jour : List.of("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")) {
+            emploiParJourEtHeure.putIfAbsent(jour, new HashMap<>());
+            emploiParJourEtHeure.get(jour).put("12h-14h", "Pause");
+        }
+
+        return emploiParJourEtHeure;
     }
 }

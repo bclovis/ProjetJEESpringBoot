@@ -17,7 +17,7 @@ public class Etudiant {
     @Column(name = "prenom", nullable = false)
     private String prenom;
 
-    @Column(name = "dateNaissance", nullable = false)
+    @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissance;
 
     @Column(name = "mdp", nullable = false)

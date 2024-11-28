@@ -3,7 +3,7 @@ package com.example.projetjeespringboot.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "EmploiDuTemps")
+@Table(name = "Emploi_du_temps")
 public class EmploiDuTemps {
 
     @Id
@@ -29,6 +29,19 @@ public class EmploiDuTemps {
     private int semaineDebut;
     private int semaineFin;
 
-    // Getters et Setters
-    // (Identiques à ceux que vous avez fournis)
+    public String getJour(){
+        return jour;
+    }
+
+    public Matiere getMatiere() {
+        return matiere;
+    }
+
+    public String getHeure() {
+        return heure;
+    }
+
+    public Enseignant getProfesseur(){
+        return professeur;
+    }
 }
