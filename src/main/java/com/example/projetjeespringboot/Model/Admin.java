@@ -1,15 +1,18 @@
 package com.example.projetjeespringboot.Model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
-@Setter
 @Getter
-@Table(name = "admin")  // Nom de la table en minuscule par convention
+@Setter
+@Table(name = "admin")
 public class Admin {
     @Id
     @Column(name = "email", nullable = false, unique = true)
@@ -21,17 +24,14 @@ public class Admin {
     @Column(name = "prenom", nullable = false)
     private String prenom;
 
-    @Temporal(TemporalType.DATE)  // On utilise @Temporal pour bien gérer le type Date sans l'heure
-    @Column(name = "date_naissance", nullable = false)  // Conventions snake_case
-    private Date dateNaissance;
+    @Column(name = "dateNaissance", nullable = false)
+    private LocalDate dateNaissance;
 
     @Column(name = "mdp", nullable = false)
     private String mdp;
 
-    // Constructeurs
     public Admin() {}
-
-    public Admin(String email, String nom, String prenom, Date dateNaissance, String mdp) {
+    public Admin(String email, String nom, String prenom, LocalDate dateNaissance, String mdp) {
         this.email = email;
         this.nom = nom;
         this.prenom = prenom;
@@ -39,4 +39,3 @@ public class Admin {
         this.mdp = mdp;
     }
 }
-

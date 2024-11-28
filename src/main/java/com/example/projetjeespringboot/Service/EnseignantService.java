@@ -1,8 +1,6 @@
 package com.example.projetjeespringboot.Service;
 
-import com.example.projetjeespringboot.Model.Admin;
 import com.example.projetjeespringboot.Model.Enseignant;
-import com.example.projetjeespringboot.Repository.AdminRepository;
 import com.example.projetjeespringboot.Repository.EnseignantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
