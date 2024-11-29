@@ -8,17 +8,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.stereotype.Controller;
-
 import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @Controller
+@RestController
+@RequestMapping("/api/etudiants")
 public class EtudiantController {
 
     @Autowired
     private EtudiantService etudiantService;
 
     private static final int PAGE_SIZE = 20;
-
 
     @GetMapping("/admin")
     public String returnHome() {
@@ -42,5 +44,25 @@ public class EtudiantController {
         model.addAttribute("recherche", recherche);
 
         return "gererEtudiants";
+    }
+
+    @GetMapping
+    public List<Etudiant> getAllEtudiants() {
+        return etudiantService.getAllEtudiants();
+    }
+
+    @GetMapping("/{email}")
+    public Optional<Etudiant> getEtudiantByEmail(@PathVariable String email) {
+        return etudiantService.getEtudiantByEmail(email);
+    }
+
+    @PostMapping
+    public Etudiant createEtudiant(@RequestBody Etudiant etudiant) {
+        return etudiantService.saveEtudiant(etudiant);
+    }
+
+    @DeleteMapping("/{email}")
+    public void deleteEtudiant(@PathVariable String email) {
+        etudiantService.deleteEtudiant(email);
     }
 }

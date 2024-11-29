@@ -15,7 +15,7 @@
         <!-- Déconnexion avec action via Spring Boot -->
         <form th:action="@{/logout}" method="post" style="display:inline;">
             <button type="submit" class="icon" title="Déconnexion">
-                <i class="fa-solid fa-power-off"></i>
+                <i class="fa-solid fa-power-off"></i> <!-- Icône de déconnexion -->
             </button>
         </form>
     </div>
@@ -26,10 +26,10 @@
     <!-- Menu latéral gauche -->
     <nav class="sidebar">
         <ul>
-            <li><a th:href="@{/AfficherEDTEtuEnsServlet}">Consulter mon emploi du temps</a></li>
-            <li><a th:href="@{/messageServlet}">Accéder à ma messagerie</a></li>
-            <li><a th:href="@{/voirNotes}">Voir mes notes</a></li>
-            <li><a th:href="@{/choixFiliere}">Faire une demande de choix de filière</a></li> <!-- Nouveau lien -->
+            <li><a href="#" th:href="@{/AfficherEDTEtuEns}">Consulter mon emploi du temps</a></li>
+            <li><a href="#" th:href="@{/messageServlet}">Accéder à ma messagerie</a></li>
+            <li><a href="#" th:href="@{/voirNotes}">Voir mes notes</a></li>
+            <li><a href="#" th:href="@{/choixFiliere}">Faire une demande de choix de filière</a></li> <!-- Nouveau lien -->
         </ul>
     </nav>
 

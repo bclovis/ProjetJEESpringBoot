@@ -1,7 +1,7 @@
 package com.example.projetjeespringboot.model;
 
 import jakarta.persistence.*;
-
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -19,20 +19,19 @@ public class Etudiant {
     private String prenom;
 
     @Column(name = "date_naissance", nullable = false)
-    private Date dateNaissance;
+    private LocalDate dateNaissance;
 
     @Column(name = "mdp", nullable = false)
     private String mdp;
 
-    @Column(name = "filiere", nullable = true)
     @Enumerated(EnumType.STRING)
-    private Filieres filiere; // Colonne avec une énumération des filières
+    @Column(name = "filiere")
+    private Filieres filiere;
 
     // Constructeurs
-
     public Etudiant() {}
 
-    public Etudiant(String email, String nom, String prenom, Date dateNaissance, String mdp, Filieres filiere) {
+    public Etudiant(String email, String nom, String prenom, LocalDate dateNaissance, String mdp, Filieres filiere) {
         this.email = email;
         this.nom = nom;
         this.prenom = prenom;
@@ -42,7 +41,6 @@ public class Etudiant {
     }
 
     // Getters et Setters
-
     public String getEmail() {
         return email;
     }
@@ -67,11 +65,11 @@ public class Etudiant {
         this.prenom = prenom;
     }
 
-    public Date getDateNaissance() {
+    public LocalDate getDateNaissance() {
         return dateNaissance;
     }
 
-    public void setDateNaissance(Date dateNaissance) {
+    public void setDateNaissance(LocalDate dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
 

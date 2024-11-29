@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-import java.util.Date; // Utilisation de LocalDate au lieu de Date
+import java.time.LocalDate; // Utilisation de LocalDate au lieu de Date
 
 @Entity
 @Table(name = "Enseignant")
@@ -20,8 +20,8 @@ public class Enseignant {
     @Column(name = "prenom", nullable = false)
     private String prenom;
 
-    @Column(name = "dateNaissance", nullable = false)
-    private Date dateNaissance; // Utilisation de LocalDate pour gérer les dates sans heure
+    @Column(name = "date_naissance", nullable = false)
+    private LocalDate dateNaissance; // Utilisation de LocalDate pour gérer les dates sans heure
 
     @Column(name = "mdp", nullable = false)
     private String mdp;
@@ -30,7 +30,7 @@ public class Enseignant {
     public Enseignant() {
     }
 
-    public Enseignant(String email, String nom, String prenom, Date dateNaissance, String mdp) {
+    public Enseignant(String email, String nom, String prenom, LocalDate dateNaissance, String mdp) {
         this.email = email;
         this.nom = nom;
         this.prenom = prenom;
@@ -63,11 +63,11 @@ public class Enseignant {
         this.prenom = prenom;
     }
 
-    public Date getDateNaissance() {
+    public LocalDate getDateNaissance() {
         return dateNaissance;
     }
 
-    public void setDateNaissance(Date dateNaissance) {
+    public void setDateNaissance(LocalDate dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
 
