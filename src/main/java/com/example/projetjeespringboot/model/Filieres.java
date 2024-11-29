@@ -3,6 +3,7 @@ package com.example.projetjeespringboot.model;
 public enum Filieres {
     INFORMATIQUE,
     MATHEMATIQUES,
+
     AUCUNE;
 
     @Override
@@ -13,7 +14,7 @@ public enum Filieres {
             case MATHEMATIQUES:
                 return "Mathématiques";
             case AUCUNE:
-                return "";
+                return "Aucune";
             default:
                 return super.toString();
         }

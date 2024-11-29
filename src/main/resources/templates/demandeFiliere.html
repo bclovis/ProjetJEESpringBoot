@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Demande de Filière</title>
+    <link rel="stylesheet" th:href="@{/css/demandeFiliere.css}">
+</head>
+<body>
+<h1>Choix de Filière</h1>
+
+<!-- Affichage des messages d'erreur ou de succès -->
+<div th:if="${error}" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
+<div th:if="${success}" style="color: green;">
+    <p th:text="${success}"></p>
+</div>
+
+<form th:action="@{/demandeFiliere}" method="post">
+    <label for="filiere">Choisissez une filière :</label>
+    <select name="filiere" id="filiere">
+        <option value="INFORMATIQUE">Informatique</option>
+        <option value="MATHEMATIQUES">Mathématiques</option>
+    </select>
+    <button type="submit">Envoyer ma demande</button>
+</form>
+
+<a class="return-home" th:href="@{/retourMenuEtudiant}">Retour à l'accueil</a>
+</body>
+</html>
