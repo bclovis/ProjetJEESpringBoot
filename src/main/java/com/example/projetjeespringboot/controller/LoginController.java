@@ -41,31 +41,34 @@ public class LoginController {
                         Model model,
                         HttpSession session) {
 
-        // Validation de l'authentification via les différents services
+        // Validation de l'authentification via AdminService ou EnseignantService selon le rôle
         if ("admin".equals(role)) {
             Admin admin = adminService.validateLogin(email, password);
             if (admin != null) {
+                // Ajouter des informations de session pour l'admin
                 session.setAttribute("email", email);
                 session.setAttribute("role", role);
-                return "admin";  // Page pour l'admin
+                return "admin";  // Rediriger vers admin.html
             }
         } else if ("enseignant".equals(role)) {
             Enseignant enseignant = enseignantService.validateLogin(email, password);
             if (enseignant != null) {
+                // Ajouter des informations de session pour l'enseignant
                 session.setAttribute("email", email);
                 session.setAttribute("role", role);
-                return "enseignant";  // Page pour l'enseignant
+                return "enseignant";  // Rediriger vers enseignant.html
             }
         } else if ("etudiant".equals(role)) {
             Etudiant etudiant = etudiantService.validateLogin(email, password);
             if (etudiant != null) {
+                // Ajouter des informations de session pour l'étudiant
                 session.setAttribute("email", email);
                 session.setAttribute("role", role);
-                return "etudiant";  // Page pour l'étudiant
+                return "etudiant";  // Rediriger vers etudiant.html
             }
         }
 
-        // Si l'authentification échoue, afficher un message d'erreur
+        // Si l'authentification échoue, afficher un message d'erreur et retourner à la page de login
         model.addAttribute("error", "Nom d'utilisateur ou mot de passe incorrect.");
         return "login";  // Retourner à la page login
     }
