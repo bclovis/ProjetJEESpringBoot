@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Controller
 public class CreerCompteController {
@@ -45,18 +44,21 @@ public class CreerCompteController {
         }
 
         // Vérification de la date de naissance et de l'âge (au moins 18 ans)
-        Date dateNaissance;
+        LocalDate dateNaissance;
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            dateNaissance = sdf.parse(dateNaissanceStr);
-            int age = compteService.calculateAge(dateNaissance);
+            // Conversion de la date de naissance de String vers LocalDate
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            dateNaissance = LocalDate.parse(dateNaissanceStr, formatter);
+
+            // Calcul de l'âge
+            long age = ChronoUnit.YEARS.between(dateNaissance, LocalDate.now());
             if (age < 18) {
                 model.addAttribute("error", "L'utilisateur doit avoir au moins 18 ans");
                 return "creationCompte"; // Retourne avec un message d'erreur si moins de 18 ans
             }
-        } catch (ParseException e) {
+        } catch (Exception e) {
             model.addAttribute("error", "Le format de la date de naissance est invalide");
-            return "creationCompte";
+            return "creationCompte"; // Erreur dans le format de la date
         }
 
         // Vérification si l'email existe déjà
@@ -75,10 +77,10 @@ public class CreerCompteController {
                 compteService.createEnseignant(enseignant);
             }
             model.addAttribute("success", "Compte créé avec succès.");
-            return "creationCompte";
+            return "creationCompte"; // Retourne à la page de création de compte avec message de succès
         } catch (Exception e) {
             model.addAttribute("error", "Erreur lors de la création du compte.");
-            return "creationCompte";
+            return "creationCompte"; // Retourne avec un message d'erreur
         }
     }
 }
