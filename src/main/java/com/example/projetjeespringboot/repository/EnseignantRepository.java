@@ -12,7 +12,6 @@ public interface EnseignantRepository extends JpaRepository<Enseignant, String> 
 
     // Recherche un enseignant par email
     Enseignant findByEmail(String email);
+    Long countByEmail(String email);
 
-    // Recherche des enseignants par nom
-    List<Enseignant> findByNom(String nom);
 }

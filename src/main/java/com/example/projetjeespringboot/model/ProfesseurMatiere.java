@@ -3,18 +3,21 @@ package com.example.projetjeespringboot.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "professeur_matiere")
+@Table(name = "professeur_matiere")  // Vous pouvez également adapter le nom de la table si nécessaire
 public class ProfesseurMatiere {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "professeur_email", nullable = false)
-    private String professeurEmail;
+    // Relation avec l'entité Enseignant
+    @ManyToOne
+    @JoinColumn(name = "professeur_email", referencedColumnName = "email", nullable = false)
+    private Enseignant enseignant;  // Relation avec l'entité Enseignant
 
-    @Column(name = "matiere_id", nullable = false)
-    private int matiereId;
+    @ManyToOne
+    @JoinColumn(name = "matiere_id", referencedColumnName = "id", nullable = false)
+    private Matiere matiere;  // Vous devrez avoir une entité Matiere qui est reliée à la table Matiere
 
     // Getters et Setters
     public int getId() {
@@ -25,19 +28,19 @@ public class ProfesseurMatiere {
         this.id = id;
     }
 
-    public String getProfesseurEmail() {
-        return professeurEmail;
+    public Enseignant getEnseignant() {
+        return enseignant;
     }
 
-    public void setProfesseurEmail(String professeurEmail) {
-        this.professeurEmail = professeurEmail;
+    public void setEnseignant(Enseignant enseignant) {
+        this.enseignant = enseignant;
     }
 
-    public int getMatiereId() {
-        return matiereId;
+    public Matiere getMatiere() {
+        return matiere;
     }
 
-    public void setMatiereId(int matiereId) {
-        this.matiereId = matiereId;
+    public void setMatiere(Matiere matiere) {
+        this.matiere = matiere;
     }
 }
