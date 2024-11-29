@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface EtudiantRepository extends JpaRepository<Etudiant, String> {
     // On peut ajouter ici des méthodes spécifiques si nécessaire, comme la recherche par email ou par rôle.
     Etudiant findByEmail(String email);
+    Long countByEmail(String email);
 }

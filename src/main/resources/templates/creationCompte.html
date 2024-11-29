@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Création de Compte</title>
+    <link rel="stylesheet" th:href="@{/css/creationCompte.css}">
+</head>
+<body>
+<h1>Création de Compte</h1>
+
+<!-- Afficher le message de succès -->
+<div th:if="${success}" class="alert alert-success" style="color: green;">
+    <p th:text="${success}"></p>
+</div>
+
+<!-- Afficher le message d'erreur -->
+<div th:if="${error}" class="alert alert-danger" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
+
+<!-- Formulaire de création de compte -->
+<form id="creation-compte-form" th:action="@{/creerCompte}" method="post">
+    <label for="typeCompte">Type de compte :</label>
+    <select name="typeCompte" id="typeCompte" required>
+        <option value="etudiant" th:selected="${typeCompte == 'etudiant'}">Étudiant</option>
+        <option value="enseignant" th:selected="${typeCompte == 'enseignant'}">Enseignant</option>
+    </select>
+    <br>
+
+    <label for="nom">Nom :</label>
+    <input type="text" id="nom" name="nom" th:value="${nom}" required>
+    <br>
+
+    <label for="prenom">Prénom :</label>
+    <input type="text" id="prenom" name="prenom" th:value="${prenom}" required>
+    <br>
+
+    <label for="email">Email :</label>
+    <input type="email" id="email" name="email" th:value="${email}" required>
+    <br>
+
+    <label for="dateNaissance">Date de Naissance :</label>
+    <input type="date" id="dateNaissance" name="dateNaissance" th:value="${dateNaissance}" required>
+    <br>
+
+    <label for="mdp">Mot de Passe :</label>
+    <input type="password" id="mdp" name="mdp" required>
+    <br><br>
+
+    <button type="submit">Créer le compte</button>
+</form>
+
+</body>
+</html>
