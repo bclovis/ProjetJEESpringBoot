@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 
 @Service
 public class NoteService {
@@ -14,19 +16,22 @@ public class NoteService {
     @Autowired
     private NoteRepository noteRepository;
 
-    public List<Note> getAllNotes() {
-        return noteRepository.findAll();
+    public List<Note> getNotesByEtudiant(String email) {
+        return noteRepository.findByEtudiantEmail(email);
     }
 
-    public Optional<Note> getNoteById(Long id) {
-        return noteRepository.findById(id);
+    public Map<String, Double> calculerMoyenneParMatiere(List<Note> notes) {
+        return notes.stream()
+                .collect(Collectors.groupingBy(
+                        note -> note.getMatiere().getNom(),
+                        Collectors.averagingDouble(Note::getNote)
+                ));
     }
 
-    public Note saveNote(Note note) {
-        return noteRepository.save(note);
-    }
-
-    public void deleteNoteById(Long id) {
-        noteRepository.deleteById(id);
+    public double calculerMoyenneGenerale(List<Note> notes) {
+        return notes.stream()
+                .mapToDouble(Note::getNote)
+                .average()
+                .orElse(0);
     }
 }

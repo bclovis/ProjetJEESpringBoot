@@ -1,55 +1,61 @@
 package com.example.projetjeespringboot.controller;
 
 import com.example.projetjeespringboot.model.Note;
-import com.example.projetjeespringboot.service.NoteService;
+import com.example.projetjeespringboot.model.Etudiant;
+import com.example.projetjeespringboot.repository.NoteRepository;
+import com.example.projetjeespringboot.repository.EtudiantRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/api/notes")
+@Controller
 public class NoteController {
 
     @Autowired
-    private NoteService noteService;
+    private NoteRepository noteRepository;
 
-    @GetMapping
-    public List<Note> getAllNotes() {
-        return noteService.getAllNotes();
-    }
+    @Autowired
+    private EtudiantRepository etudiantRepository;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Note> getNoteById(@PathVariable Long id) {
-        Optional<Note> note = noteService.getNoteById(id);
-        if (note.isPresent()) {
-            return ResponseEntity.ok(note.get());
-        } else {
-            return ResponseEntity.notFound().build();
+    @GetMapping("/voirNotes")
+    public String voirNotes(
+            HttpSession session,
+            Model model) {
+        String email = (String) session.getAttribute("email");
+        Etudiant etudiant = etudiantRepository.findByEmail(email);
+
+        if (etudiant == null) {
+            return "redirect:/login";  // Rediriger vers la page de login si l'étudiant n'est pas trouvé
         }
-    }
 
-    @PostMapping
-    public Note createNote(@RequestBody Note note) {
-        return noteService.saveNote(note);
-    }
+        // Récupérer les notes de l'étudiant
+        List<Note> notes = noteRepository.findByEtudiant(etudiant);
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Note> updateNote(@PathVariable Long id, @RequestBody Note updatedNote) {
-        Optional<Note> existingNote = noteService.getNoteById(id);
-        if (existingNote.isPresent()) {
-            updatedNote.setId(id);
-            return ResponseEntity.ok(noteService.saveNote(updatedNote));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+        // Organiser les notes par matière
+        Map<String, List<Note>> notesParMatiere = notes.stream()
+                .collect(Collectors.groupingBy(note -> note.getMatiere().getNom()));
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNoteById(@PathVariable Long id) {
-        noteService.deleteNoteById(id);
-        return ResponseEntity.noContent().build();
+        // Calcul des moyennes par matière
+        Map<String, Double> moyennesParMatiere = notesParMatiere.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
+                        .mapToDouble(Note::getNote)
+                        .average().orElse(0)));
+
+        // Calcul de la moyenne générale
+        double moyenneGenerale = notes.stream().mapToDouble(Note::getNote).average().orElse(0);
+
+        // Passer les données à la vue
+        model.addAttribute("notes", notes);
+        model.addAttribute("moyenneGenerale", moyenneGenerale);
+        model.addAttribute("moyennesParMatiere", moyennesParMatiere);
+        model.addAttribute("notesParMatiere", notesParMatiere);
+
+        return "voirNotes";  // Vue Thymeleaf "voirNotes.html"
     }
 }
