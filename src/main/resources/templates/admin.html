@@ -9,7 +9,7 @@
 <body>
 <!-- Barre de navigation -->
 <div class="header">
-    <img th:src="@{/images/Logo_Projet_JEE.PNG}" alt="Logo Université" class="logo">
+    <img src="/static/images/Logo_Projet_JEE.PNG" alt="Logo Université" class="logo">
     <div class="icons">
         <span class="icon"><i class="fa-solid fa-circle-user"></i></span>  <!-- Icône du compte utilisateur -->
         <form class="logout-form" action="#" th:action="@{/logout}" method="post" style="display:inline;">
@@ -35,7 +35,7 @@
                 </ul>
             </li>
             <li><a href="#" th:data-page="AssocierProfesseurMatiereServlet">Associer un Professeur à une Matière</a></li>
-            <li><a href="#" th:data-page="emploiDuTemps">Voir Emploi du temps</a></li>
+            <li><a href="AfficherEmploiDuTemps" th:data-page="emploiDuTemps">Voir Emploi du temps</a></li>
         </ul>
     </nav>
 
@@ -83,8 +83,6 @@
             }
         });
     });
-
-
 </script>
 </body>
 </html>
