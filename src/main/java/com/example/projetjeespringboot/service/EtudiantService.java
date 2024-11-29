@@ -27,9 +27,11 @@ public class EtudiantService {
     public List<Etudiant> getEtudiants(int page, int pageSize, String recherche) {
         Pageable pageable = PageRequest.of(page - 1, pageSize);
         if (recherche != null && !recherche.isEmpty()) {
-            return etudiantRepository.findByKeyword(recherche.toLowerCase(), pageable);
+            List<Etudiant> resultat = etudiantRepository.findByKeyword(recherche.toLowerCase(), pageable);
+            return resultat;
         }
-        return etudiantRepository.findAll(pageable).getContent();
+        List<Etudiant> resultat = etudiantRepository.findAll(pageable).getContent();
+        return resultat;
     }
 
     public int getTotalPages(int pageSize, String recherche) {

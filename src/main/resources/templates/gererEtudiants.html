@@ -10,7 +10,7 @@
 <!-- Barre de recherche -->
 <div class="search-bar">
   <form id="gerer-etudiant-form" th:action="@{/gererEtudiants}" method="get">
-    <input type="text" id="search-input" name="keyword" th:value="${recherche}" placeholder="Rechercher un étudiant...">
+    <input type="text" id="search-input" name="recherche" th:value="${recherche}" placeholder="Rechercher un étudiant...">
     <button type="submit">Rechercher</button>
   </form>
 </div>
@@ -34,11 +34,11 @@
       </tr>
 
       <tr th:each="etudiant : ${etudiants}">
-        <td>th:text="${etudiant.email}"</td>
-        <td>th:text="${etudiant.nom}"</td>
-        <td>th:text="${etudiant.prenom}"</td>
+        <td th:text="${etudiant.email}"></td>
+        <td th:text="${etudiant.nom}"></td>
+        <td th:text="${etudiant.prenom}"></td>
         <td th:text="${#dates.format(etudiant.dateNaissance, 'dd/MM/yyyy')}"></td> <!-- Formatage de la date -->
-        <td>th:text="${etudiant.filiere}"</td>
+        <td th:text="${etudiant.filiere}"></td>
         <td>
           <button class="btn btn-primary" th:attr="data-email=${etudiant.email}"  onclick="ouvrirFormModifier(this)">ModifierTest</button>
           <button class="btn btn-primary" th:attr="data-email=${etudiant.email}" onclick="">SupprimerTest</button>

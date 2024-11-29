@@ -19,6 +19,12 @@ public class EtudiantController {
 
     private static final int PAGE_SIZE = 20;
 
+
+    @GetMapping("/admin")
+    public String returnHome() {
+        return "admin";
+    }
+
     @GetMapping("/gererEtudiants")
     public String gererEtudiants(
             @RequestParam(value = "page", defaultValue = "1") int page,
