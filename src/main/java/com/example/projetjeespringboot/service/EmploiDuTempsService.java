@@ -1,7 +1,9 @@
 package com.example.projetjeespringboot.service;
 
 import com.example.projetjeespringboot.model.EmploiDuTemps;
+import com.example.projetjeespringboot.model.Etudiant;  // Assurez-vous d'importer votre modèle Etudiant
 import com.example.projetjeespringboot.repository.EmploiDuTempsRepository;
+import com.example.projetjeespringboot.repository.EtudiantRepository;  // Le repository pour l'Etudiant
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +17,24 @@ public class EmploiDuTempsService {
     @Autowired
     private EmploiDuTempsRepository emploiDuTempsRepository;
 
+    @Autowired
+    private EtudiantRepository etudiantRepository;  // Le repository pour accéder aux étudiants
+
     public Map<String, Map<String, String>> getEmploiDuTemps(String role, String email, int semaine) {
         List<EmploiDuTemps> emploiDuTemps;
         Map<String, Map<String, String>> emploiParJourEtHeure = new HashMap<>();
+        String filiere = "";  // Variable pour stocker la filière de l'étudiant
 
         if ("etudiant".equals(role)) {
+            // Récupérer l'étudiant par son email
+            Etudiant etudiant = etudiantRepository.findByEmail(email);
+            if (etudiant != null) {
+                filiere = etudiant.getFiliere().toString();  // Récupérer la filière de l'étudiant
+            }
+
+            // Utilisation de la filière récupérée dans la requête
             emploiDuTemps = emploiDuTempsRepository.findByFiliereNomAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
-                    "nomDeFiliere", semaine, semaine); // Remplacez "nomDeFiliere" par le bon nom
+                    filiere, semaine, semaine);  // Utiliser la filière dynamique de l'étudiant
         } else if ("enseignant".equals(role)) {
             emploiDuTemps = emploiDuTempsRepository.findByProfesseurEmailAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
                     email, semaine, semaine);
@@ -47,6 +60,7 @@ public class EmploiDuTempsService {
             emploiParJourEtHeure.get(jour).put("12h-14h", "Pause");
         }
 
+        System.out.println(emploiParJourEtHeure);
         return emploiParJourEtHeure;
     }
 }

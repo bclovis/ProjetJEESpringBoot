@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Emploi du Temps</title>
-  <link rel="stylesheet" th:href="@{/CSS/EDTEtuEns.css}" />
+  <link rel="stylesheet" th:href="@{/CSS/EDTEtuEns.css?v=3}" />
 </head>
 <body>
 <h1>Emploi du Temps</h1>
-
 
 <!-- Formulaire pour changer de semaine -->
 <form method="get" th:action="@{/AfficherEDTEtuEns}">
@@ -16,9 +15,7 @@
     <select id="semaine" name="semaine">
       <!-- Afficher les semaines de 1 à 36 avec la semaine sélectionnée -->
       <th:block th:each="i : ${#numbers.sequence(1, 36)}">
-        <option th:value="${i}"
-                th:text="'Semaine ' + ${i}"
-                th:selected="${i == semaine}"></option>
+        <option th:value="${i}" th:text="'Semaine ' + ${i}" th:selected="${i == semaine}"></option>
       </th:block>
     </select>
   </div>
@@ -31,30 +28,30 @@
   <thead>
   <tr>
     <th>Heures</th>
-    <th>Lundi</th>
-    <th>Mardi</th>
-    <th>Mercredi</th>
-    <th>Jeudi</th>
-    <th>Vendredi</th>
+    <!-- Itération sur les jours -->
+    <th th:each="jour : ${jours}" th:text="${jour}"></th>
   </tr>
   </thead>
   <tbody>
   <tr th:if="${#lists.isEmpty(emploiParJourEtHeure)}">
     <td colspan="6">Aucun emploi du temps disponible pour cette semaine.</td>
   </tr>
+
+  <!-- Affichage des heures -->
   <tr th:each="heure : ${heures}">
-    <td th:text="${heure}"></td>
+    <td th:text="${heure}"></td> <!-- Affichage des heures -->
+
+    <!-- Affichage des cours pour chaque jour -->
     <td th:each="jour : ${jours}">
-    <td th:text="${emploiParJourEtHeure[jour][heure] != null ? emploiParJourEtHeure[jour][heure] : 'Aucun cours'}"
-        th:classappend="${emploiParJourEtHeure[jour][heure] == 'Pause' ? 'pause-cell' : (emploiParJourEtHeure[jour][heure] == 'Aucun cours' ? 'empty-cell' : 'filled-cell')}"></td>
+        <span th:text="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null ? emploiParJourEtHeure.get(jour).get(heure) : 'Aucun cours'}"
+              th:classappend="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) == 'Pause' ? 'pause-cell' : 'filled-cell'}"></span>
     </td>
   </tr>
   </tbody>
 </table>
 
 <!-- Retour à l'accueil -->
-<a th:href="@{${role != null ? '/login' : '/login'}}" class="return-home">Retour à l'accueil</a>
-
+<a th:href="${role == 'etudiant' ? '/etudiant' : (role == 'enseignant' ? '/enseignant' : '/login')}" class="return-home">Retour à l'accueil</a>
 
 </body>
 </html>
