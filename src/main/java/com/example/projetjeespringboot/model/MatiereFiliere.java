@@ -14,15 +14,14 @@ public class MatiereFiliere {
     @JoinColumn(name = "matiere_id", nullable = false)
     private Matiere matiere;
 
-    @ManyToOne
     @JoinColumn(name = "filiere_id", nullable = false)
-    private Filiere filiere;
+    private Filieres filiere;
 
     // Constructeur par défaut
     public MatiereFiliere() {}
 
     // Constructeur avec les objets Matiere et Filiere
-    public MatiereFiliere(Matiere matiere, Filiere filiere) {
+    public MatiereFiliere(Matiere matiere, Filieres filiere) {
         this.matiere = matiere;
         this.filiere = filiere;
     }
@@ -44,16 +43,16 @@ public class MatiereFiliere {
         this.matiere = matiere;
     }
 
-    public Filiere getFiliere() {
+    public Filieres getFiliere() {
         return filiere;
     }
 
-    public void setFiliere(Filiere filiere) {
+    public void setFiliere(Filieres filiere) {
         this.filiere = filiere;
     }
 
     @Override
     public String toString() {
-        return "MatiereFiliere [id=" + id + ", matiere=" + matiere.getNom() + ", filiere=" + filiere.getNom() + "]";
+        return "MatiereFiliere [id=" + id + ", matiere=" + matiere.getNom() + ", filiere=" + filiere + "]";
     }
 }

@@ -2,6 +2,7 @@ package com.example.projetjeespringboot.service;
 
 import com.example.projetjeespringboot.model.EmploiDuTemps;
 import com.example.projetjeespringboot.model.Etudiant;  // Assurez-vous d'importer votre modèle Etudiant
+import com.example.projetjeespringboot.model.Filieres;
 import com.example.projetjeespringboot.repository.EmploiDuTempsRepository;
 import com.example.projetjeespringboot.repository.EtudiantRepository;  // Le repository pour l'Etudiant
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +60,6 @@ public class EmploiDuTempsService {
             emploiParJourEtHeure.putIfAbsent(jour, new HashMap<>());
             emploiParJourEtHeure.get(jour).put("12h-14h", "Pause");
         }
-
-        System.out.println(emploiParJourEtHeure);
         return emploiParJourEtHeure;
     }
 }

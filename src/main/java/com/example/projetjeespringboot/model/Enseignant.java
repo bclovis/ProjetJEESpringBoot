@@ -20,7 +20,7 @@ public class Enseignant {
     @Column(name = "prenom", nullable = false)
     private String prenom;
 
-    @Column(name = "dateNaissance", nullable = false)
+    @Column(name = "date_naissance", nullable = false)
     private Date dateNaissance; // Utilisation de LocalDate pour gérer les dates sans heure
 
     @Column(name = "mdp", nullable = false)

@@ -28,9 +28,6 @@ public class EmploiDuTempsController {
         String role = (String) session.getAttribute("role");
         String email = (String) session.getAttribute("email");
 
-        System.out.println(role);
-        System.out.println(email);
-
         // Vérifier si l'utilisateur est connecté
         if (role == null || email == null) {
             return "redirect:/login"; // Rediriger vers la page de connexion si non connecté

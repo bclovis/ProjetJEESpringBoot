@@ -34,7 +34,7 @@ public class ReleveNotesGenerator {
 
             // Format de la date de naissance au format français (dd/MM/yyyy)
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String dateNaissanceFormatee = etudiant.getDateNaissance().format(formatter);  // Formate la date sans l'heure
+            String dateNaissanceFormatee = String.valueOf(etudiant.getDateNaissance());  // Formate la date sans l'heure
 
             // Log pour s'assurer de la bonne conversion
             System.out.println("Date de naissance formatée: " + dateNaissanceFormatee);

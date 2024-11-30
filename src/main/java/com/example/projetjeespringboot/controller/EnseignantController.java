@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/enseignant")
+@RequestMapping
 public class EnseignantController {
 
-    @GetMapping
+    @GetMapping("/enseignant")
     public String afficherPageEnseignant() {
         return "enseignant"; // Correspond à src/main/resources/templates/etudiant.html
     }

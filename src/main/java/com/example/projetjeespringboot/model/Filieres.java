@@ -1,10 +1,21 @@
 package com.example.projetjeespringboot.model;
 
 public enum Filieres {
-    INFORMATIQUE,
-    MATHEMATIQUES,
+    MATHEMATIQUES(1),
 
-    AUCUNE;
+    INFORMATIQUE(2),
+
+    AUCUNE(3);
+
+    private final int id;
+
+    Filieres(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
 
     @Override
     public String toString() {

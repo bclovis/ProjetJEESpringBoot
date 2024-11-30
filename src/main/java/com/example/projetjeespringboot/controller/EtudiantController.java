@@ -43,4 +43,9 @@ public class EtudiantController {
 
         return "gererEtudiants";
     }
+
+    @GetMapping("/etudiant")
+    public String afficherPageEtudiant() {
+        return "etudiant";
+    }
 }
