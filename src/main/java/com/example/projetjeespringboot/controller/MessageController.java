@@ -83,6 +83,8 @@ public class MessageController {
     @GetMapping("/messagerie")
     public String getMessages(HttpSession session, Model model, @RequestParam(required = false, defaultValue = "1") int page) {
         // Récupération de l'utilisateur connecté
+        String role = (String) session.getAttribute("role");
+        model.addAttribute("role", role);
         String email = (String) session.getAttribute("email");
         System.out.println(email);
         if (email == null) {
@@ -116,6 +118,7 @@ public class MessageController {
         }
 
         model.addAttribute("messages", messages);
+        model.addAttribute("role", role);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", (int) Math.ceil((double) totalMessages / messagesPerPage));
 

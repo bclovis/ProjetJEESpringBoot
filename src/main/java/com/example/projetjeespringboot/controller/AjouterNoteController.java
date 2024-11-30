@@ -43,8 +43,9 @@ public class AjouterNoteController {
             ajouterNoteService.ajouterNote(emailProf, matiere, emailEtudiant, note);
             model.addAttribute("success", "Note ajoutée avec succès !");
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("error", "Etudiant non existant");
         }
+        model.addAttribute("matieres", matiereRepository.findByProfesseurEmail(emailProf));
         return "ajouterNote";
     }
 }
