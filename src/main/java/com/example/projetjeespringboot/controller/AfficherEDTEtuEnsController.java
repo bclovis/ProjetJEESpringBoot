@@ -1,23 +1,20 @@
 package com.example.projetjeespringboot.controller;
 
-import com.example.projetjeespringboot.service.EmploiDuTempsService;
+import com.example.projetjeespringboot.service.AfficherEDTEtuEnsService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
-import java.net.http.HttpClient;
-import java.util.List;
 import java.util.Map;
 
 @Controller
-public class EmploiDuTempsController {
+public class AfficherEDTEtuEnsController {
 
     @Autowired
-    private EmploiDuTempsService emploiDuTempsService;
+    private AfficherEDTEtuEnsService afficherEDTEtuEnsService;
 
     @GetMapping("/AfficherEDTEtuEns")
     public String afficherEDTEtuEns(
@@ -34,7 +31,7 @@ public class EmploiDuTempsController {
         }
 
         // Obtenir l'emploi du temps en fonction du rôle, de l'email et de la semaine
-        Map<String, Map<String, String>> emploiParJourEtHeure = emploiDuTempsService.getEmploiDuTemps(role, email, semaine);
+        Map<String, Map<String, String>> emploiParJourEtHeure = afficherEDTEtuEnsService.getEmploiDuTemps(role, email, semaine);
 
         // Ajouter les données au modèle Thymeleaf
         model.addAttribute("emploiParJourEtHeure", emploiParJourEtHeure);

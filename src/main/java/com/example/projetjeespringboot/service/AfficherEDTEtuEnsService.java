@@ -2,8 +2,7 @@ package com.example.projetjeespringboot.service;
 
 import com.example.projetjeespringboot.model.EmploiDuTemps;
 import com.example.projetjeespringboot.model.Etudiant;  // Assurez-vous d'importer votre modèle Etudiant
-import com.example.projetjeespringboot.model.Filieres;
-import com.example.projetjeespringboot.repository.EmploiDuTempsRepository;
+import com.example.projetjeespringboot.repository.AfficherEDTEtuEnsRepository;
 import com.example.projetjeespringboot.repository.EtudiantRepository;  // Le repository pour l'Etudiant
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class EmploiDuTempsService {
+public class AfficherEDTEtuEnsService {
 
     @Autowired
-    private EmploiDuTempsRepository emploiDuTempsRepository;
+    private AfficherEDTEtuEnsRepository afficherEDTEtuEnsRepository;
 
     @Autowired
     private EtudiantRepository etudiantRepository;  // Le repository pour accéder aux étudiants
@@ -34,10 +33,10 @@ public class EmploiDuTempsService {
             }
 
             // Utilisation de la filière récupérée dans la requête
-            emploiDuTemps = emploiDuTempsRepository.findByFiliereNomAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
+            emploiDuTemps = afficherEDTEtuEnsRepository.findByFiliereNomAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
                     filiere, semaine, semaine);  // Utiliser la filière dynamique de l'étudiant
         } else if ("enseignant".equals(role)) {
-            emploiDuTemps = emploiDuTempsRepository.findByProfesseurEmailAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
+            emploiDuTemps = afficherEDTEtuEnsRepository.findByProfesseurEmailAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
                     email, semaine, semaine);
         } else {
             throw new IllegalArgumentException("Rôle utilisateur non valide : " + role);
