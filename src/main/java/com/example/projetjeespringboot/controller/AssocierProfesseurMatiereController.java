@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
 
@@ -39,9 +38,9 @@ public class AssocierProfesseurMatiereController {
         List<Matiere> matieres = matiereRepository.findAll();
         model.addAttribute("matieres", matieres);
 
-        // Récupérer les associations avec un filtrage par mot-clé
-        List<ProfesseurMatiere> associations = professeurMatiereRepository.findAssociations(keyword);
-        model.addAttribute("associations", associations); // Tu envoies la liste des ProfesseurMatiere ici
+        // Récupérer toutes les associations (avec ou sans recherche)
+        List<ProfesseurMatiere> associations = (keyword == null || keyword.isEmpty()) ? professeurMatiereRepository.findAll() : professeurMatiereRepository.findAssociations(keyword);
+        model.addAttribute("associations", associations); // Liste des associations
 
         // Ajouter le mot-clé dans le modèle pour réutiliser dans le formulaire de recherche
         model.addAttribute("keyword", keyword);
