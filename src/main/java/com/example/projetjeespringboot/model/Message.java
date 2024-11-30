@@ -4,38 +4,84 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "message")
+@Table(name = "messages")
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "expediteur", nullable = false)
-    private String expediteur;
+    @Column(nullable = false)
+    private String sender;
 
-    @Column(name = "destinataire", nullable = false)
-    private String destinataire;
+    @Column(nullable = false)
+    private String recipient;
 
-    @Column(name = "sujet", nullable = false)
-    private String sujet;
+    @Column(nullable = false)
+    private String subject;
 
-    @Column(name = "contenu", nullable = false)
-    private String contenu;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;
 
-    @Column(name = "date_envoi", nullable = false)
-    private LocalDateTime dateEnvoi;
+    @Column(nullable = false)
+    private LocalDateTime sentAt;
 
     public Message() {}
 
-    public Message(String expediteur, String destinataire, String sujet, String contenu, LocalDateTime dateEnvoi) {
-        this.expediteur = expediteur;
-        this.destinataire = destinataire;
-        this.sujet = sujet;
-        this.contenu = contenu;
-        this.dateEnvoi = dateEnvoi;
+    public Message(String sender, String recipient, String subject, String content, LocalDateTime sentAt) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.subject = subject;
+        this.content = content;
+        this.sentAt = sentAt;
     }
 
-    // Getters et setters
-    // ...
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getSentAt() {
+        return sentAt;
+    }
+
+    public void setSentAt(LocalDateTime sentAt) {
+        this.sentAt = sentAt;
+    }
 }

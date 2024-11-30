@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Messagerie</title>
+  <link rel="stylesheet" th:href="@{/css/messagerie.css}">
+</head>
+<body>
+<div class="container">
+  <h1>Messagerie</h1>
+  <div th:if="${confirmationMessage}" class="confirmation-message">
+    [[${confirmationMessage}]]
+  </div>
+
+  <div>
+    <h2>Messages reçus</h2>
+    <div th:if="${#lists.isEmpty(messages)}">
+      <p>Aucun message reçu.</p>
+    </div>
+    <div th:each="message : ${messages}" class="message-block">
+      <h3>Sujet : [[${message.subject}]]</h3>
+      <p><strong>De :</strong> [[${message.sender}]]</p>
+      <p><strong>Reçu le :</strong> [[${#temporals.format(message.sentAt, 'dd/MM/yyyy HH:mm')}]]</p>
+      <p>[[${message.content}]]</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <h2>Envoyer un nouveau message</h2>
+    <form th:action="@{/messagerie/envoyer}" method="post">
+      <label for="recipient">Destinataire :</label>
+      <input type="email" id="recipient" name="recipient" placeholder="Entrez l'email du destinataire" required>
+
+      <label for="subject">Sujet :</label>
+      <input type="text" id="subject" name="subject" placeholder="Entrez le sujet du message" required>
+
+      <label for="content">Contenu :</label>
+      <textarea id="content" name="content" rows="5" placeholder="Écrivez votre message ici..." required></textarea>
+
+      <button type="submit">Envoyer</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
