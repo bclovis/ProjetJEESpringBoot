@@ -1,32 +1,38 @@
 package com.example.projetjeespringboot.service;
 
 import com.example.projetjeespringboot.model.DemandeFiliere;
+import com.example.projetjeespringboot.model.Filieres;
 import com.example.projetjeespringboot.repository.DemandeFiliereRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.Date;
 
 @Service
 public class DemandeFiliereService {
 
-    @Autowired
-    private DemandeFiliereRepository demandeFiliereRepository;
+    private final DemandeFiliereRepository demandeFiliereRepository;
 
-    public DemandeFiliere saveDemandeFiliere(DemandeFiliere demandeFiliere) {
-        return demandeFiliereRepository.save(demandeFiliere);
+    public DemandeFiliereService(DemandeFiliereRepository demandeFiliereRepository) {
+        this.demandeFiliereRepository = demandeFiliereRepository;
     }
 
-    public Optional<DemandeFiliere> getDemandeFiliereById(int id) {
-        return demandeFiliereRepository.findById(id);
-    }
+    public void createDemandeFiliere(String etudiantEmail, String filiereStr) {
+        Filieres filiere;
 
-    public List<DemandeFiliere> getAllDemandesFiliere() {
-        return demandeFiliereRepository.findAll();
-    }
+        try {
+            filiere = Filieres.valueOf(filiereStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Filière invalide.");
+        }
 
-    public void deleteDemandeFiliereById(int id) {
-        demandeFiliereRepository.deleteById(id);
+        // Créer une nouvelle demande de filière sans vérifier les demandes précédentes
+        DemandeFiliere demande = new DemandeFiliere();
+        demande.setEtudiantEmail(etudiantEmail);
+        demande.setFiliere(filiere);
+        demande.setStatut("EN_ATTENTE");
+        demande.setDateDemande(new Date());
+        demande.setCommentaireAdmin("En attente de traitement");
+
+        demandeFiliereRepository.save(demande);
     }
 }

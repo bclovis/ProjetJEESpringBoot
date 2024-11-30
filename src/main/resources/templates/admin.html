@@ -9,7 +9,7 @@
 <body>
 <!-- Barre de navigation -->
 <div class="header">
-    <img src="/static/images/Logo_Projet_JEE.PNG" alt="Logo Université" class="logo">
+    <img th:src="@{/images/Logo_Projet_JEE.PNG}" alt="Logo Université" class="logo">
     <div class="icons">
         <span class="icon"><i class="fa-solid fa-circle-user"></i></span>  <!-- Icône du compte utilisateur -->
         <form class="logout-form" action="#" th:action="@{/logout}" method="post" style="display:inline;">
@@ -48,16 +48,21 @@
 </div>
 
 <script>
-    // Fonction pour gérer le chargement dynamique des pages
     function loadPage(page) {
-        fetch(page)
-            .then(response => response.text())
+        const url = "/admin/" + page; // Ajoute le chemin relatif correct
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP ! status: ${response.status}`);
+                }
+                return response.text();
+            })
             .then(html => {
-                // Remplir la zone dynamique avec le contenu de la page
                 document.getElementById('dynamic-content').innerHTML = html;
             })
             .catch(err => console.error('Erreur lors du chargement de la page :', err));
     }
+
 
     function deroulerSubmenu(event) {
         event.preventDefault(); // Empêche le lien de rediriger
@@ -78,10 +83,45 @@
 
             e.preventDefault(); // Empêche le comportement par défaut
             const page = this.getAttribute('data-page'); // Récupère le nom de la page
+            console.log("Page sélectionnée:", page); // Vérifie la page sélectionnée
             if (page) {
                 loadPage(page); // Charger la page via AJAX
             }
         });
+    });
+
+    // Gestionnaire d'envoi de formulaire pour la recherche d'étudiant
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'gerer-etudiant-form') {
+            e.preventDefault(); // Empêche la soumission classique
+
+            // Récupérer la valeur saisie
+            const recherche = document.getElementById('search-input').value;
+            console.log("Requête de recherche:", recherche); // Affiche la valeur de recherche
+
+            const url = 'admin/gererEtudiants?recherche=' + encodeURIComponent(recherche);
+            console.log("URL de la requête de recherche:", url); // Vérifie l'URL construite
+
+            // Envoie les données à l'URL de recherche
+            fetch(url, {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération des résultats de recherche');
+                    }
+                    response.text()
+                })
+                .then(html => {
+                    console.log("HTML reçu pour la recherche:", html); // Vérifie le contenu HTML de la recherche
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche:', error);
+                });
+        }
     });
 </script>
 </body>
