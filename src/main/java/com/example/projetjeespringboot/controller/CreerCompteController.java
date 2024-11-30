@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 
 @Controller
 public class CreerCompteController {
@@ -49,13 +48,6 @@ public class CreerCompteController {
             // Conversion de la date de naissance de String vers LocalDate
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             dateNaissance = LocalDate.parse(dateNaissanceStr, formatter);
-
-            // Calcul de l'âge
-            long age = ChronoUnit.YEARS.between(dateNaissance, LocalDate.now());
-            if (age < 18) {
-                model.addAttribute("error", "L'utilisateur doit avoir au moins 18 ans");
-                return "creationCompte"; // Retourne avec un message d'erreur si moins de 18 ans
-            }
         } catch (Exception e) {
             model.addAttribute("error", "Le format de la date de naissance est invalide");
             return "creationCompte"; // Erreur dans le format de la date
