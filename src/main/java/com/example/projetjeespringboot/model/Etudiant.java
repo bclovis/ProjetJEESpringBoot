@@ -90,4 +90,16 @@ public class Etudiant {
     public void setFiliere(Filieres filiere) {
         this.filiere = filiere;
     }
+
+    public Etudiant orElseThrow(Object étudiantIntrouvable) {
+        return null;
+    }
+
+    public boolean isEmpty() {
+        return (this.email == null && this.nom == null  && this.prenom == null && this.filiere == null  && this.mdp == null  && this.dateNaissance == null);
+    }
+
+    public Etudiant get() {
+        return this;
+    }
 }

@@ -1,17 +1,25 @@
 package com.example.projetjeespringboot.model;
 
-import jakarta.persistence.*;  // Utilisation de jakarta.persistence pour Spring Boot 3
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Matiere")
+@Table(name = "matiere") // Correspond exactement à la table "matiere" dans votre base de données
 public class Matiere {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(name = "nom", nullable = false, unique = true) // Ajout de "unique = true" pour refléter votre contrainte SQL
     private String nom;
+
+    // Constructeurs
+    public Matiere() {
+    }
+
+    public Matiere(String nom) {
+        this.nom = nom;
+    }
 
     // Getters et Setters
     public int getId() {
@@ -30,8 +38,17 @@ public class Matiere {
         this.nom = nom;
     }
 
+    // Méthode toString pour un affichage lisible
     @Override
     public String toString() {
-        return nom;
+        return "Matiere{id=" + id + ", nom='" + nom + '\'' + '}';
+    }
+
+    public Matiere get() {
+        return this;
+    }
+
+    public boolean isEmpty() {
+        return (nom == null || nom.trim().isEmpty());
     }
 }
