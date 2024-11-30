@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class EtudiantService {
 
@@ -20,30 +17,11 @@ public class EtudiantService {
 
     // Méthode pour valider la connexion de l'étudiant
     public Etudiant validateLogin(String email, String password) {
-        // Cherche un enseignant par son email
         Etudiant etudiant = etudiantRepository.findByEmail(email);
-
-        // Si un enseignant est trouvé et que les mots de passe correspondent
         if (etudiant != null && etudiant.getMdp().equals(password)) {
-            return etudiant;  // Retourner l'enseignant si la validation réussit
+            return etudiant;  // Retourne l'étudiant si l'email et le mot de passe sont valides
         }
         return null;  // Retourne null si l'authentification échoue
-    }
-
-    public List<Etudiant> getAllEtudiants() {
-        return etudiantRepository.findAll();
-    }
-
-    public Optional<Etudiant> getEtudiantByEmail(String email) {
-        return etudiantRepository.findById(email);
-    }
-
-    public Etudiant saveEtudiant(Etudiant etudiant) {
-        return etudiantRepository.save(etudiant);
-    }
-
-    public void deleteEtudiant(String email) {
-        etudiantRepository.deleteById(email);
     }
 
     public List<Etudiant> getEtudiants(int page, int pageSize, String recherche) {
