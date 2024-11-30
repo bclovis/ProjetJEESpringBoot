@@ -50,12 +50,34 @@
 
         <!-- Affichage des cours pour chaque jour -->
         <td th:each="jour : ${jours}"
-            th:classappend="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null && emploiParJourEtHeure.get(jour).get(heure) != 'Pause'? 'filled-cell' : (emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) == 'Pause' ? 'pause-cell' : 'empty-cell')}">
+            th:classappend="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null && emploiParJourEtHeure.get(jour).get(heure) != 'Pause' ? 'filled-cell' : (emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) == 'Pause' ? 'pause-cell' : 'empty-cell')}">
+
+            <!-- Afficher le nom du cours -->
             <span th:text="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null ? emploiParJourEtHeure.get(jour).get(heure) : 'Aucun cours'}"></span>
+
+            <!-- Boutons Déplacer et Supprimer si un cours est présent (pas une pause) -->
+            <div th:if="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null && emploiParJourEtHeure.get(jour).get(heure) != 'Pause'}">
+                <!-- Bouton Déplacer -->
+                <form th:action="@{/deplacerCours}" method="post" style="display:inline;">
+                    <input type="hidden" name="jour" th:value="${jour}" />
+                    <input type="hidden" name="heure" th:value="${heure}" />
+                    <button type="submit">Déplacer</button>
+                </form>
+
+                <!-- Bouton Supprimer -->
+                <form th:action="@{/supprimerCours}" method="post" style="display:inline;">
+                    <input type="hidden" name="jour" th:value="${jour}" />
+                    <input type="hidden" name="heure" th:value="${heure}" />
+                    <button type="submit">Supprimer</button>
+                </form>
+            </div>
         </td>
     </tr>
     </tbody>
 </table>
+
+<!-- Bouton flottant pour ajouter un cours -->
+<a href="/ajouterCours" class="add-course-button" title="Ajouter un cours">Ajouter un cours</a>
 
 <!-- Retour à l'accueil -->
 <a href="admin" class="return-home">Retour à l'accueil</a>
