@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Associer un Professeur à une Matière</title>
+    <link rel="stylesheet" th:href="@{/css/associerProfesseurMatiere.css}">
+</head>
+<body>
+<h1>Associer un Professeur à une Matière</h1>
+
+<!-- Formulaire pour associer un professeur et une matière -->
+<form class="form" th:action="@{/associerProfesseurMatiere}" method="post">
+    <div class="form-group">
+        <label for="professeur">Professeur :</label>
+        <select name="professeur_email" id="professeur">
+            <option value="">-- Choisir un professeur --</option>
+            <th:block th:each="prof : ${professeurs}">
+                <option th:value="${prof.email}" th:text="${prof.nom} + ' ' + ${prof.prenom}"></option>
+            </th:block>
+        </select>
+    </div>
+    <br>
+
+    <div class="form-group">
+        <label for="matiere">Matière :</label>
+        <select name="matiere_id" id="matiere">
+            <option value="">-- Choisir une matière --</option>
+            <th:block th:each="matiere : ${matieres}">
+                <option th:value="${matiere.id}" th:text="${matiere.nom}"></option>
+            </th:block>
+        </select>
+    </div>
+    <br>
+
+    <button type="submit" class="button">Associer</button>
+</form>
+
+<div class="search-bar-container">
+    <!-- Barre de recherche -->
+    <form class="search-form" th:action="@{/associerProfesseurMatiere}" method="get">
+        <input type="text" name="keyword" placeholder="Rechercher prof/matière" th:value="${keyword}">
+        <button type="submit" class="button">Rechercher</button>
+    </form>
+    <!-- Bouton pour réinitialiser la recherche -->
+    <form class="reset-form" th:action="@{/associerProfesseurMatiere}" method="get">
+        <button type="submit" class="button">Réinitialiser</button>
+    </form>
+</div>
+
+<!-- Tableau des associations existantes -->
+<h2>Associations existantes</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Professeur</th>
+        <th>Matière</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="assoc : ${associations}">
+        <tr>
+            <!-- Afficher le nom et prénom de l'enseignant -->
+            <td th:text="${assoc.enseignant.nom} + ' ' + ${assoc.enseignant.prenom}"></td>
+            <!-- Afficher le nom de la matière -->
+            <td th:text="${assoc.matiere.nom}"></td>
+            <td>
+                <!-- Formulaire pour supprimer l'association -->
+                <form class="remove-form" th:action="@{/supprimerAssocProfMatiere}" method="post">
+                    <!-- Passer l'ID de l'association à supprimer -->
+                    <input type="hidden" name="id" th:value="${assoc.id}"/>
+                    <button type="submit" class="button">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+<br><br>
+<a href="admin" class="return-home">Retour à l'accueil</a>
+</body>
+</html>

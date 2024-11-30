@@ -5,9 +5,6 @@ import com.example.projetjeespringboot.repository.EnseignantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class EnseignantService {
 
@@ -27,23 +24,5 @@ public class EnseignantService {
         return null;  // Retourner null si les informations sont incorrectes
     }
 
-    // Méthode pour récupérer tous les enseignants
-    public List<Enseignant> getAllEnseignants() {
-        return enseignantRepository.findAll();
-    }
-
-    // Méthode pour récupérer un enseignant par email
-    public Optional<Enseignant> getEnseignantByEmail(String email) {
-        return enseignantRepository.findById(email);
-    }
-
-    // Méthode pour enregistrer un enseignant
-    public Enseignant saveEnseignant(Enseignant enseignant) {
-        return enseignantRepository.save(enseignant);
-    }
-
-    // Méthode pour supprimer un enseignant par email
-    public void deleteEnseignant(String email) {
-        enseignantRepository.deleteById(email);
-    }
+    // Autres méthodes pour gérer les enseignants peuvent être ajoutées ici...
 }

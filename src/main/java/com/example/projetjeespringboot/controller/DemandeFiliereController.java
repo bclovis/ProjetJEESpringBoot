@@ -1,37 +1,47 @@
 package com.example.projetjeespringboot.controller;
 
-import com.example.projetjeespringboot.model.DemandeFiliere;
 import com.example.projetjeespringboot.service.DemandeFiliereService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-@RestController
-@RequestMapping("/api/demandes-filiere")
+@Controller
 public class DemandeFiliereController {
 
-    @Autowired
-    private DemandeFiliereService demandeFiliereService;
+    private final DemandeFiliereService demandeFiliereService;
 
-    @PostMapping
-    public DemandeFiliere createOrUpdateDemandeFiliere(@RequestBody DemandeFiliere demandeFiliere) {
-        return demandeFiliereService.saveDemandeFiliere(demandeFiliere);
+    public DemandeFiliereController(DemandeFiliereService demandeFiliereService) {
+        this.demandeFiliereService = demandeFiliereService;
     }
 
-    @GetMapping("/{id}")
-    public Optional<DemandeFiliere> getDemandeFiliereById(@PathVariable int id) {
-        return demandeFiliereService.getDemandeFiliereById(id);
+    @GetMapping("/demandeFiliere")
+    public String showChoixFiliereForm() {
+        // Affiche la page demandeFiliere.html
+        return "demandeFiliere";
     }
 
-    @GetMapping
-    public List<DemandeFiliere> getAllDemandesFiliere() {
-        return demandeFiliereService.getAllDemandesFiliere();
+    @GetMapping("/retourMenuEtudiant")
+    public String retourMenuEtu() {
+        // Affiche la page demandeFiliere.html
+        return "etudiant";
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteDemandeFiliere(@PathVariable int id) {
-        demandeFiliereService.deleteDemandeFiliereById(id);
+    @PostMapping("/demandeFiliere")
+    public String envoyerDemande(@RequestParam("filiere") String filiereStr, HttpSession session, Model model) {
+        String etudiantEmail = (String) session.getAttribute("email");
+        if (etudiantEmail == null) {
+            model.addAttribute("error", "Erreur : Étudiant non connecté.");
+            return "demandeFiliere";
+        }
+
+        try {
+            demandeFiliereService.createDemandeFiliere(etudiantEmail, filiereStr);
+            model.addAttribute("success", "Votre demande a été envoyée avec succès.");
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", "Erreur : " + e.getMessage());
+        }
+
+        return "demandeFiliere";  // Renvoyer vers la même page avec un message d'état
     }
 }
