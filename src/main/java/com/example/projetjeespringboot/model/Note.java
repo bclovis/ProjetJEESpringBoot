@@ -24,7 +24,6 @@ public class Note {
     @JoinColumn(name = "matiere", nullable = false)
     private Matiere matiere;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "date", nullable = false)
     private Date date;
 
