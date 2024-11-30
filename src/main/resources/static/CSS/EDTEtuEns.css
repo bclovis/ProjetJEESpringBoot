@@ -90,24 +90,24 @@ td {
 }
 
 /* Cellules avec un cours */
-.filled-cell div {
+.filled-cell {
     background-color: #4A4AFF; /* Fond bleu */
     color: #fff; /* Texte blanc */
     padding: 5px;
-    border-radius: 4px; /* Facultatif, pour arrondir les angles */
+    border-radius: 4px; /* Arrondi des angles */
     text-align: center;
-    border: 1px solid #012a36; /* Bordures spécifiques */
+    border: 1px solid #012a36; /* Bordure spécifique */
 }
 
 /* Cellules sans cours */
-.empty-cell div {
+.empty-cell {
     background-color: transparent; /* Pas de couleur de fond */
     color: inherit; /* Texte hérité */
     border: 1px solid #012a36; /* Bordures spécifiques */
 }
 
 /* Cellules pour les pauses */
-.pause-cell div {
+.pause-cell {
     background-color: #d3d3d3; /* Fond gris clair */
     color: #000; /* Texte noir */
     padding: 5px;
