@@ -45,7 +45,7 @@
                     <tr>
                         <td colspan="2" style="font-weight: bold; text-align: center;">
                             <span th:text="${matiere}"></span> - Moyenne :
-                            <span th:text="${moyennesParMatiere[matiere]}">0</span> / 20
+                            <span th:text="${moyennesParMatiere.get(matiere)}">0</span> / 20
                         </td>
                     </tr>
 

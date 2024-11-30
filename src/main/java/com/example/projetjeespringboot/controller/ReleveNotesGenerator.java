@@ -9,6 +9,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Date;  // Importer java.util.Date
@@ -33,8 +34,8 @@ public class ReleveNotesGenerator {
             Document document = new Document(pdf);
 
             // Format de la date de naissance au format français (dd/MM/yyyy)
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String dateNaissanceFormatee = String.valueOf(etudiant.getDateNaissance());  // Formate la date sans l'heure
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String dateNaissanceFormatee = sdf.format(etudiant.getDateNaissance());
 
             // Log pour s'assurer de la bonne conversion
             System.out.println("Date de naissance formatée: " + dateNaissanceFormatee);
