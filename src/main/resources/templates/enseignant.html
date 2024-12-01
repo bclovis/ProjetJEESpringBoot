@@ -3,21 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Espace Enseignant</title>
-    <!-- Utilisation de th:href pour le CSS -->
     <link rel="stylesheet" th:href="@{CSS/enseignant.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <!-- Barre de navigation -->
 <div class="header">
-    <!-- Logo -->
     <img th:src="@{/images/Logo_Projet_JEE.PNG}" alt="Logo Université" class="logo">
     <div class="icons">
-        <!-- Icône du compte utilisateur -->
         <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
-
-        <!-- Formulaire de déconnexion -->
-        <form th:action="@{/logout}" method="post" style="display:inline;">
+        <form class="logout-form" th:action="@{/logout}" action="#" method="post" style="display:inline;">
             <button type="submit" class="icon" title="Déconnexion">
                 <i class="fa-solid fa-power-off"></i>
             </button>
@@ -30,17 +25,43 @@
     <!-- Menu latéral gauche -->
     <nav class="sidebar">
         <ul>
-            <li><a th:href="@{/notes/ajouter}">Ajouter une note</a></li>
-            <li><a th:href="@{/AfficherEDTEtuEns}">Voir mon emploi du temps</a></li>
-            <li><a th:href="@{/messagerie}">Accéder à ma messagerie</a></li>
+            <li><a href="#" data-page="/notes/ajouter">Ajouter une note</a></li>
+            <li><a href="#" data-page="/AfficherEDTEtuEns">Voir mon emploi du temps</a></li>
+            <li><a href="#" data-page="/messagerie">Accéder à ma messagerie</a></li>
         </ul>
     </nav>
 
     <!-- Zone de contenu principale -->
     <div class="content-area">
-        <h1>Bienvenue sur l'espace enseignant</h1>
-        <p>Sélectionnez une option à gauche pour afficher les informations.</p>
+        <h1 id="default-message">Bienvenue sur l'espace enseignant</h1>
+        <p id="default-message-paragraph">Sélectionnez une option à gauche pour afficher les informations.</p>
+        <div id="dynamic-content"></div>
     </div>
 </div>
+
+<script>
+    // Fonction pour gérer le chargement dynamique des pages
+    function loadPage(page) {
+        fetch(page)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('dynamic-content').innerHTML = html;
+                document.getElementById('default-message').style.display = 'none';
+                document.getElementById('default-message-paragraph').style.display = 'none';
+            })
+            .catch(err => console.error('Erreur lors du chargement de la page :', err));
+    }
+
+    // Ajout des événements de clic sur les liens du menu
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+            if (page) {
+                loadPage(page);
+            }
+        });
+    });
+</script>
 </body>
 </html>

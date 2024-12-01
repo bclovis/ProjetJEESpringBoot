@@ -13,7 +13,7 @@
     <div class="icons">
         <span class="icon"><i class="fa-solid fa-circle-user"></i></span>  <!-- Icône du compte utilisateur -->
         <!-- Déconnexion avec action via Spring Boot -->
-        <form th:action="@{/logout}" method="post" style="display:inline;">
+        <form class="logout-form" th:action="@{/logout}" method="post" style="display:inline;">
             <button type="submit" class="icon" title="Déconnexion">
                 <i class="fa-solid fa-power-off"></i> <!-- Icône de déconnexion -->
             </button>
@@ -26,18 +26,42 @@
     <!-- Menu latéral gauche -->
     <nav class="sidebar">
         <ul>
-            <li><a href="#" th:href="@{/AfficherEDTEtuEns}">Consulter mon emploi du temps</a></li>
-            <li><a href="#" th:href="@{/messagerie}">Accéder à ma messagerie</a></li>
-            <li><a href="#" th:href="@{/voirNotes}">Voir mes notes</a></li>
-            <li><a href="#" th:href="@{/demandeFiliere}">Faire une demande de choix de filière</a></li> <!-- Nouveau lien -->
+            <li><a href="#" data-page="AfficherEDTEtuEns">Consulter mon emploi du temps</a></li>
+            <li><a href="#" data-page="messagerie">Accéder à ma messagerie</a></li>
+            <li><a href="#" data-page="voirNotes">Voir mes notes</a></li>
+            <li><a href="#" data-page="demandeFiliere">Faire une demande de choix de filière</a></li>
         </ul>
     </nav>
 
     <!-- Zone de contenu principale -->
     <div class="content-area">
-        <h1>Bienvenue dans l'espace étudiant</h1>
-        <p>Sélectionnez une option à gauche pour afficher les informations.</p>
+        <h1 id="default-message">Bienvenue dans l'espace étudiant</h1>
+        <p id="default-message-paragraph">Sélectionnez une option à gauche pour afficher les informations.</p>
+        <div id="dynamic-content"></div>
     </div>
 </div>
+
+<script>
+    // Fonction pour gérer le chargement dynamique des pages
+    function loadPage(page) {
+        fetch(page)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('dynamic-content').innerHTML = html;
+            })
+            .catch(err => console.error('Erreur lors du chargement de la page :', err));
+    }
+
+    // Ajoute un écouteur d'événement à chaque lien du menu
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+            const page = this.getAttribute('data-page'); // Récupère le nom de la page cible
+            if (page) {
+                loadPage(page); // Charge la page via AJAX
+            }
+        });
+    });
+</script>
 </body>
 </html>

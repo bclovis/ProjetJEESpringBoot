@@ -16,6 +16,11 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+
+.logout-form button{
+    margin-bottom: 0;
+}
+
 .header img.logo {
     height: 55px;
     width: auto;
@@ -86,4 +91,8 @@ body {
     width: 75%;
     padding: 20px;
     background-color: #ffffff;
+}
+
+.header .icons .icon i {
+    font-size: 30px; /* Ajustez la taille selon votre préférence */
 }
