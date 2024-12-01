@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class EmploiDuTempsService {
@@ -105,4 +106,53 @@ public class EmploiDuTempsService {
         );
         return count > 0; // Si count > 0, cela signifie qu'il y a un conflit pour cette filière
     }
+
+    public boolean supprimerCours(String role, String email, String jour, String heure, Integer coursId) {
+        // Vérifier que le cours existe
+        Optional<EmploiDuTemps> emploiDuTempsOpt = emploiDuTempsRepository.findById(coursId);
+
+        if (emploiDuTempsOpt.isPresent()) {
+            EmploiDuTemps emploiDuTemps = emploiDuTempsOpt.get();
+
+            // Vérifier si le cours correspond bien à l'utilisateur (optionnel)
+            // Si tu as une logique basée sur l'email ou le rôle de l'utilisateur, ajoute-la ici
+
+            // Supprimer le cours de la base de données
+            emploiDuTempsRepository.delete(emploiDuTemps);
+            return true;
+        } else {
+            return false; // Le cours n'a pas été trouvé
+        }
+    }
+
+
+    // Méthode pour récupérer les IDs des cours dans l'emploi du temps
+    public Map<String, Map<String, Integer>> getEmploiDuTempsId(String role, String email, int semaine, String filiereNom) {
+        List<EmploiDuTemps> emploiDuTemps;
+        Map<String, Map<String, Integer>> emploiIdParJourEtHeure = new HashMap<>();
+        String filiere = filiereNom;
+
+        emploiDuTemps = emploiDuTempsRepository.findByFiliereNomAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqual(
+                filiere, semaine, semaine);
+
+        // Organiser les données par jour et heure, avec l'ID du cours
+        for (EmploiDuTemps row : emploiDuTemps) {
+            String jour = row.getJour();
+            String heure = row.getHeure();
+            Integer coursId = row.getId();  // Assumons que l'ID du cours est récupéré ici
+
+            // Ajouter les données dans la map
+            emploiIdParJourEtHeure.putIfAbsent(jour, new HashMap<>());
+            emploiIdParJourEtHeure.get(jour).put(heure, coursId);
+        }
+
+        // Ajouter la pause de 12h à 14h pour chaque jour (aucun ID de cours pour la pause)
+        for (String jour : List.of("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi")) {
+            emploiIdParJourEtHeure.putIfAbsent(jour, new HashMap<>());
+            emploiIdParJourEtHeure.get(jour).put("12h-14h", null); // Pas d'ID pour la pause
+        }
+
+        return emploiIdParJourEtHeure;
+    }
+
 }

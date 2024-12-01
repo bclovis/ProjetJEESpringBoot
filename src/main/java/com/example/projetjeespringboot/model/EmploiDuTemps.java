@@ -49,6 +49,10 @@ public class EmploiDuTemps {
         return semestre;
     }
 
+    public int getId(){
+        return id;
+    }
+
     public void setSemestre(int semestre) {
         this.semestre = semestre;
     }

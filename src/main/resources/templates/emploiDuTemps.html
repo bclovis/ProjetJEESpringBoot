@@ -64,12 +64,17 @@
                     <button type="submit">Déplacer</button>
                 </form>
 
-                <!-- Bouton Supprimer -->
                 <form th:action="@{/supprimerCours}" method="post" style="display:inline;">
                     <input type="hidden" name="jour" th:value="${jour}" />
                     <input type="hidden" name="heure" th:value="${heure}" />
+
+                    <!-- Vérification si l'ID du cours existe avant de l'inclure dans le formulaire -->
+                    <input type="hidden" name="coursId"
+                           th:value="${emploiIdParJourEtHeure.get(jour) != null ? emploiIdParJourEtHeure.get(jour).get(heure) : ''}" />
+
                     <button type="submit">Supprimer</button>
                 </form>
+
             </div>
         </td>
     </tr>
