@@ -58,20 +58,15 @@
             <!-- Boutons Déplacer et Supprimer si un cours est présent (pas une pause) -->
             <div th:if="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null && emploiParJourEtHeure.get(jour).get(heure) != 'Pause'}">
                 <!-- Bouton Déplacer -->
-                <form th:action="@{/deplacerCours}" method="post" style="display:inline;">
-                    <input type="hidden" name="jour" th:value="${jour}" />
-                    <input type="hidden" name="heure" th:value="${heure}" />
+                <form th:action="@{/deplacerCoursForm}" method="get" style="display:inline;">
+                    <input type="hidden" name="coursId" th:value="${emploiIdParJourEtHeure.get(jour).get(heure)}" />
                     <button type="submit">Déplacer</button>
                 </form>
 
                 <form th:action="@{/supprimerCours}" method="post" style="display:inline;">
+                    <input type="hidden" name="coursId" th:value="${emploiIdParJourEtHeure.get(jour).get(heure)}" />
                     <input type="hidden" name="jour" th:value="${jour}" />
                     <input type="hidden" name="heure" th:value="${heure}" />
-
-                    <!-- Vérification si l'ID du cours existe avant de l'inclure dans le formulaire -->
-                    <input type="hidden" name="coursId"
-                           th:value="${emploiIdParJourEtHeure.get(jour) != null ? emploiIdParJourEtHeure.get(jour).get(heure) : ''}" />
-
                     <button type="submit">Supprimer</button>
                 </form>
 

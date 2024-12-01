@@ -26,4 +26,12 @@ public interface EmploiDuTempsRepository extends JpaRepository<EmploiDuTemps, In
             int semestre,
             int semaineDebut,
             int semaineFin);
+
+    // Vérification des conflits avec le professeur
+    long countByJourAndHeureAndProfesseurEmailAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqualAndIdNot(
+            String jour, String heure, String professeurEmail, int semaine, int semaineFin, int id);
+
+    // Vérification des conflits avec la filière
+    long countByJourAndHeureAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqualAndFiliereIdAndIdNot(
+            String jour, String heure, int semaine, int semaineFin, int filiereId, int id);
 }

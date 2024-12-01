@@ -1,5 +1,6 @@
 package com.example.projetjeespringboot.controller;
 
+import com.example.projetjeespringboot.model.EmploiDuTemps;
 import com.example.projetjeespringboot.service.EmploiDuTempsService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +100,13 @@ public class EmploiDuTempsController {
 
         // Retourner à l'emplois du temps de la semaine 1 et de la filière Mathématiques
         return "emploiDuTemps"; // Assurez-vous que la vue est rechargée avec les données mises à jour
+    }
+
+    // Méthode pour afficher le formulaire de déplacement
+    @GetMapping("/deplacerCoursForm")
+    public String afficherFormulaireDeplacement(@RequestParam int coursId, Model model) {
+        EmploiDuTemps cours = emploiDuTempsService.getCoursById(coursId);
+        model.addAttribute("cours", cours);
+        return "deplacerCours"; // Rediriger vers la page de formulaire de déplacement
     }
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Déplacer un Cours</title>
+    <link rel="stylesheet" th:href="@{/CSS/deplacerCours.css}" />
+</head>
+<body>
+
+<h1>Déplacer un Cours</h1>
+
+<!-- Affichage du message de succès ou d'erreur -->
+<div th:if="${message}">
+    <p th:class="${messageClass}" th:text="${message}"></p>
+</div>
+
+<form th:action="@{/deplacerCours}" method="post" class="deplace-form">
+    <!-- Cours ID caché -->
+    <input type="hidden" name="coursId" th:value="${cours.id}" />
+
+    <label for="jour">Nouveau Jour :</label>
+    <select id="jour" name="jour">
+        <option value="Lundi" th:selected="${cours.jour == 'Lundi'}">Lundi</option>
+        <option value="Mardi" th:selected="${cours.jour == 'Mardi'}">Mardi</option>
+        <option value="Mercredi" th:selected="${cours.jour == 'Mercredi'}">Mercredi</option>
+        <option value="Jeudi" th:selected="${cours.jour == 'Jeudi'}">Jeudi</option>
+        <option value="Vendredi" th:selected="${cours.jour == 'Vendredi'}">Vendredi</option>
+    </select><br>
+
+    <label for="heure">Nouvelle Heure :</label>
+    <select id="heure" name="heure">
+        <option value="08h-10h" th:selected="${cours.heure == '08h-10h'}">08h-10h</option>
+        <option value="10h-12h" th:selected="${cours.heure == '10h-12h'}">10h-12h</option>
+        <option value="12h-14h" th:selected="${cours.heure == '12h-14h'}">12h-14h</option>
+        <option value="14h-16h" th:selected="${cours.heure == '14h-16h'}">14h-16h</option>
+        <option value="16h-18h" th:selected="${cours.heure == '16h-18h'}">16h-18h</option>
+    </select><br>
+
+    <label for="semaine">Nouvelle Semaine :</label>
+    <input type="number" id="semaine" name="semaine" min="1" max="36" th:value="${cours.semaineDebut}" /><br>
+
+    <button type="submit">Déplacer</button>
+    <br><br>
+
+    <!-- Retour à l'accueil -->
+    <a href="/admin" class="return-home">Retour à l'accueil</a>
+</form>
+
+</body>
+</html>

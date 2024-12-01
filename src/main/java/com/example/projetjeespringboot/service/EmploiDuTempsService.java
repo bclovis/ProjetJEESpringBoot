@@ -6,6 +6,7 @@ import com.example.projetjeespringboot.model.Filiere;
 import com.example.projetjeespringboot.repository.EmploiDuTempsRepository;
 import com.example.projetjeespringboot.repository.ProfesseurMatiereRepository;
 import com.example.projetjeespringboot.repository.FiliereRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -153,6 +154,44 @@ public class EmploiDuTempsService {
         }
 
         return emploiIdParJourEtHeure;
+    }
+
+    // Récupérer un cours par son ID
+    public EmploiDuTemps getCoursById(int coursId) {
+        return emploiDuTempsRepository.findById(coursId).orElse(null); // Si le cours n'existe pas, retourne null
+    }
+
+    public boolean deplacerCours(int coursId, String jour, String heure, int semaine) {
+        Optional<EmploiDuTemps> coursOptional = emploiDuTempsRepository.findById(coursId);
+        if (coursOptional.isPresent()) {
+            EmploiDuTemps cours = coursOptional.get();
+            cours.setJour(jour);
+            cours.setHeure(heure);
+            cours.setSemaineDebut(semaine);
+            cours.setSemaineFin(semaine);
+
+            emploiDuTempsRepository.save(cours); // Sauvegarder les modifications
+            return true;
+        }
+        return false;
+    }
+
+    // Vérification des conflits (professeur et filière)
+    @Transactional
+    public boolean verifierConflit(String jour, String heure, int semaine, int filiereId, int coursId, String professeurEmail) {
+        // Vérification du conflit avec le professeur
+        long professeurConflit = emploiDuTempsRepository.countByJourAndHeureAndProfesseurEmailAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqualAndIdNot(
+                jour, heure, professeurEmail, semaine, semaine, coursId);
+
+        if (professeurConflit > 0) {
+            return true;  // Conflit avec le professeur
+        }
+
+        // Vérification du conflit dans la même filière
+        long filiereConflit = emploiDuTempsRepository.countByJourAndHeureAndSemaineDebutLessThanEqualAndSemaineFinGreaterThanEqualAndFiliereIdAndIdNot(
+                jour, heure, semaine, semaine, filiereId, coursId);
+
+        return filiereConflit > 0;  // Conflit avec un autre cours dans la même filière
     }
 
 }
