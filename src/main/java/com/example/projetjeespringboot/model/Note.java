@@ -2,6 +2,8 @@ package com.example.projetjeespringboot.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -33,7 +35,7 @@ public class Note {
 
     public Note(float note, Etudiant etudiant, Matiere matiere) {
         this.note = note;
-        this.date = new Date();
+        this.date = new Date(); // Définit la date actuelle par défaut
         this.etudiant = etudiant;
         this.matiere = matiere;
     }
@@ -59,8 +61,13 @@ public class Note {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(LocalDate localDate) {
+        // Conversion de LocalDate en java.util.Date
+        if (localDate != null) {
+            this.date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        } else {
+            this.date = null;
+        }
     }
 
     public Etudiant getEtudiant() {
