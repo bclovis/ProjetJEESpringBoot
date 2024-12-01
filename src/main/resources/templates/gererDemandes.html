@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Gérer les Demandes de Filière</title>
+  <link rel="stylesheet" th:href="@{/css/gererDemandes.css}">
+</head>
+<body>
+<h1>Liste des Demandes de Filière</h1>
+
+<!-- Barre de recherche -->
+<div class="search-bar">
+  <form th:action="@{/gererDemandes}" method="get">
+    <input type="text" name="recherche" placeholder="Rechercher une demande..." th:value="${recherche}"/>
+    <button type="submit">Rechercher</button>
+  </form>
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Email Étudiant</th>
+    <th>Filière</th>
+    <th>Statut</th>
+    <th>Date de Demande</th>
+    <th>Commentaire Admin</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <th:block th:if="${not #lists.isEmpty(demandes)}">
+    <tr th:each="demande : ${demandes}">
+      <td th:text="${demande.id}">1</td>
+      <td th:text="${demande.etudiantEmail}">email</td>
+      <td th:text="${demande.filiere}">filiere</td>
+      <td th:text="${demande.statut}">statut</td>
+      <td th:text="${#dates.format(demande.dateDemande, 'dd/MM/yyyy')}">date</td>
+      <td th:text="${demande.commentaireAdmin}">commentaire</td>
+      <td>
+        <form th:action="@{/gererDemandes}" method="post">
+          <input type="hidden" name="demandeId" th:value="${demande.id}"/>
+          <input type="text" name="commentaire" placeholder="Commentaire admin..."/>
+          <button type="submit" name="action" value="commenter">Ajouter/Modifier le commentaire</button>
+          <button type="submit" name="action" value="accepter">Accepter</button>
+          <button type="submit" name="action" value="refuser">Refuser</button>
+          <button type="submit" name="action" value="supprimer">Supprimer</button>
+        </form>
+      </td>
+    </tr>
+  </th:block>
+  <th:block th:if="${#lists.isEmpty(demandes)}">
+    <tr>
+      <td colspan="7">Aucune demande trouvée.</td>
+    </tr>
+  </th:block>
+  </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="pagination">
+  <a th:each="i : ${#numbers.sequence(1, totalPages)}"
+     th:href="@{|/gererDemandes?page=${i}&recherche=${recherche}|}"
+     th:text="${i}"
+     th:classappend="${i == currentPage} ? 'current-page'"></a>
+</div>
+
+<a th:href="@{/admin}" class="return-home">Retour à l'accueil</a>
+</body>
+</html>

@@ -42,9 +42,9 @@
     <td th:text="${heure}"></td> <!-- Affichage des heures -->
 
     <!-- Affichage des cours pour chaque jour -->
-    <td th:each="jour : ${jours}">
-        <span th:text="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null ? emploiParJourEtHeure.get(jour).get(heure) : 'Aucun cours'}"
-              th:classappend="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) == 'Pause' ? 'pause-cell' : 'filled-cell'}"></span>
+    <td th:each="jour : ${jours}"
+        th:classappend="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null && emploiParJourEtHeure.get(jour).get(heure) != 'Pause'? 'filled-cell' : (emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) == 'Pause' ? 'pause-cell' : 'empty-cell')}">
+      <span th:text="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null ? emploiParJourEtHeure.get(jour).get(heure) : 'Aucun cours'}"></span>
     </td>
   </tr>
   </tbody>

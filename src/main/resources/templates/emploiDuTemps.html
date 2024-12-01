@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Emploi du Temps</title>
+    <link rel="stylesheet" th:href="@{/CSS/emploiDuTemps.css}" />
+</head>
+<body>
+<h1>Emploi du Temps</h1>
+
+<!-- Formulaire pour changer de semaine et de filière -->
+<form method="get" th:action="@{/emploiDuTemps}">
+    <div class="form-group">
+        <label for="filiere">Choisir une filière :</label>
+        <select id="filiere" name="filiere">
+            <option value="Toutes" th:selected="${filiere == 'Toutes'}">Toutes</option>
+            <option value="Mathématiques" th:selected="${filiere == 'Mathématiques'}">Mathématiques</option>
+            <option value="Informatique" th:selected="${filiere == 'Informatique'}">Informatique</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="semaine">Semaine :</label>
+        <select id="semaine" name="semaine">
+            <th:block th:each="i : ${#numbers.sequence(1, 36)}">
+                <option th:value="${i}" th:text="'Semaine ' + ${i}" th:selected="${i == semaine}"></option>
+            </th:block>
+        </select>
+    </div>
+
+    <button type="submit">Afficher l'emploi du temps</button>
+</form>
+
+<!-- Tableau pour afficher l'emploi du temps -->
+<table>
+    <thead>
+    <tr>
+        <th>Heures</th>
+        <th th:each="jour : ${jours}" th:text="${jour}"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(emploiParJourEtHeure)}">
+        <td colspan="6">Aucun emploi du temps disponible pour cette semaine.</td>
+    </tr>
+
+    <!-- Affichage des heures -->
+    <tr th:each="heure : ${heures}">
+        <td th:text="${heure}"></td> <!-- Affichage des heures -->
+
+        <!-- Affichage des cours pour chaque jour -->
+        <td th:each="jour : ${jours}"
+            th:classappend="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null && emploiParJourEtHeure.get(jour).get(heure) != 'Pause' ? 'filled-cell' : (emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) == 'Pause' ? 'pause-cell' : 'empty-cell')}">
+
+            <!-- Afficher le nom du cours -->
+            <span th:text="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null ? emploiParJourEtHeure.get(jour).get(heure) : 'Aucun cours'}"></span>
+
+            <!-- Boutons Déplacer et Supprimer si un cours est présent (pas une pause) -->
+            <div th:if="${emploiParJourEtHeure.get(jour) != null && emploiParJourEtHeure.get(jour).get(heure) != null && emploiParJourEtHeure.get(jour).get(heure) != 'Pause'}">
+                <!-- Bouton Déplacer -->
+                <form th:action="@{/deplacerCours}" method="post" style="display:inline;">
+                    <input type="hidden" name="jour" th:value="${jour}" />
+                    <input type="hidden" name="heure" th:value="${heure}" />
+                    <button type="submit">Déplacer</button>
+                </form>
+
+                <!-- Bouton Supprimer -->
+                <form th:action="@{/supprimerCours}" method="post" style="display:inline;">
+                    <input type="hidden" name="jour" th:value="${jour}" />
+                    <input type="hidden" name="heure" th:value="${heure}" />
+                    <button type="submit">Supprimer</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Bouton flottant pour ajouter un cours -->
+<a href="/ajouterCours" class="add-course-button" title="Ajouter un cours">Ajouter un cours</a>
+
+<!-- Retour à l'accueil -->
+<a href="admin" class="return-home">Retour à l'accueil</a>
+
+</body>
+</html>
