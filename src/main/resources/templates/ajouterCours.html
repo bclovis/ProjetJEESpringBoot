@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Cours</title>
+    <link rel="stylesheet" th:href="@{/css/ajouterCours.css}">
+</head>
+<body>
+<h1>Ajouter un Cours</h1>
+
+<!-- Afficher les messages -->
+<div th:if="${message}" style="color: green; font-weight: bold;">
+    <p th:text="${message}"></p>
+</div>
+<div th:if="${error}" style="color: red; font-weight: bold;">
+    <p th:text="${error}"></p>
+</div>
+
+<form action="#" th:action="@{/ajouterCours}" method="post">
+    <label for="filiere">Filière :</label>
+    <select id="filiere" name="filiere" required>
+        <option th:each="filiere : ${filieres}" th:value="${filiere.nom}" th:text="${filiere.nom}"></option>
+    </select><br>
+
+    <label for="semestre">Semestre :</label>
+    <select id="semestre" name="semestre" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select><br>
+
+    <label for="matiere">Matière :</label>
+    <select id="matiere" name="matiere" required>
+        <option th:each="matiere : ${matieres}" th:value="${matiere.id}" th:text="${matiere.nom}"></option>
+    </select><br>
+
+    <label for="professeur">Professeur :</label>
+    <select id="professeur" name="professeur" required>
+        <option th:each="enseignant : ${enseignants}" th:value="${enseignant.email}" th:text="${enseignant.nom} + ' ' + ${enseignant.prenom}"></option>
+    </select><br>
+
+    <label for="jour">Jour :</label>
+    <select id="jour" name="jour" required>
+        <option th:each="jour : ${jours}" th:value="${jour}" th:text="${jour}"></option>
+    </select><br>
+
+    <label for="heure">Heure :</label>
+    <select id="heure" name="heure" required>
+        <option th:each="heure : ${heures}" th:value="${heure}" th:text="${heure}"></option>
+    </select><br>
+
+    <label for="semaine">Semaine :</label>
+    <select id="semaine" name="semaine" required>
+        <option th:each="semaine : ${semaines}" th:value="${semaine}" th:text="'Semaine ' + ${semaine}"></option>
+    </select><br>
+
+    <button type="submit">Ajouter</button>
+    <br><br>
+    <a href="admin" class="return-home">Retour à l'accueil</a>
+</form>
+</body>
+</html>

@@ -1,5 +1,7 @@
 package com.example.projetjeespringboot.repository;
 
+import com.example.projetjeespringboot.model.Enseignant;
+import com.example.projetjeespringboot.model.Matiere;
 import com.example.projetjeespringboot.model.ProfesseurMatiere;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +20,8 @@ public interface ProfesseurMatiereRepository extends JpaRepository<ProfesseurMat
             "JOIN pm.matiere m " +
             "WHERE e.nom LIKE %:keyword% OR e.prenom LIKE %:keyword% OR m.nom LIKE %:keyword%")
     List<ProfesseurMatiere> findAssociations(String keyword);
+
+    ProfesseurMatiere findByEnseignantAndMatiere(Enseignant enseignant, Matiere matiere);
+
+    long countByEnseignantEmailAndMatiereId(String enseignantEmail, int matiereId);
 }
