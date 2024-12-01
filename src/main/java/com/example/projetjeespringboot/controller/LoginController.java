@@ -1,7 +1,6 @@
 package com.example.projetjeespringboot.controller;
 
 import com.example.projetjeespringboot.model.Admin;
-import com.example.projetjeespringboot.model.Enseignant;
 import com.example.projetjeespringboot.model.Etudiant;
 import com.example.projetjeespringboot.service.AdminService;
 import com.example.projetjeespringboot.service.EnseignantService;
@@ -51,7 +50,7 @@ public class LoginController {
                 return "admin";  // Rediriger vers admin.html
             }
         } else if ("enseignant".equals(role)) {
-            Enseignant enseignant = enseignantService.validateLogin(email, password);
+            com.example.projetjeespringboot.model.Enseignant enseignant = enseignantService.validateLogin(email, password);
             if (enseignant != null) {
                 // Ajouter des informations de session pour l'enseignant
                 session.setAttribute("email", email);

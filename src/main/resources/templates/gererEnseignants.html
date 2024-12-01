@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Enseignants</title>
+    <link rel="stylesheet" th:href="@{/css/gererEtudiant.css}">
+</head>
+<body>
+<h1>Liste des Enseignants</h1>
+
+<!-- Barre de recherche -->
+<div class="search-bar">
+    <form id="gerer-enseignant-form" method="get" action="#">
+        <input type="text" id="search-input" name="recherche" th:value="${recherche}" placeholder="Rechercher un enseignant...">
+        <button type="submit">Rechercher</button>
+    </form>
+</div>
+
+<!-- Affichage des enseignants -->
+<table>
+    <thead>
+    <tr>
+        <th>Email</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Date de Naissance</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="enseignant : ${enseignants}">
+        <td th:text="${enseignant.email}"></td>
+        <td th:text="${enseignant.nom}"></td>
+        <td th:text="${enseignant.prenom}"></td>
+        <td th:text="${#dates.format(enseignant.dateNaissance, 'dd/MM/yyyy')}"></td>
+        <td>
+            <form id="modification-enseignant-form" method="post" th:action="@{/enseignants/modifier}">
+                <input type="hidden" name="email" th:value="${enseignant.email}" />
+                <button type="submit">Modifier</button>
+            </form>
+            <form id="delete-teacher-form" method="post" th:action="@{/enseignants/supprimer}">
+                <input type="hidden" name="email" th:value="${enseignant.email}" />
+                <button type="submit">Supprimer</button>
+            </form>
+        </td>
+    </tr>
+    <tr th:if="${enseignants.empty}">
+        <td colspan="5">Aucun enseignant trouvé.</td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="pagination">
+  <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+  <a th:href="@{/gererEnseignants(page=${i}, recherche=${recherche})}"
+     th:classappend="${i == currentPage} ? 'current-page' : ''">
+    <span th:text="${i}"></span>
+  </a>
+  </span>
+</div>
+</body>
+</html>

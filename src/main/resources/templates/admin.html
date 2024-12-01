@@ -48,16 +48,12 @@
 </div>
 
 <script>
+    // Fonction pour gérer le chargement dynamique des pages
     function loadPage(page) {
-        const url = "/admin/" + page; // Ajoute le chemin relatif correct
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP ! status: ${response.status}`);
-                }
-                return response.text();
-            })
+        fetch(page)
+            .then(response => response.text())
             .then(html => {
+                // Remplir la zone dynamique avec le contenu de la page
                 document.getElementById('dynamic-content').innerHTML = html;
             })
             .catch(err => console.error('Erreur lors du chargement de la page :', err));
@@ -93,28 +89,19 @@
     // Gestionnaire d'envoi de formulaire pour la recherche d'étudiant
     document.addEventListener('submit', function (e) {
         const form = e.target;
+        const target = e.target;
         if (form.id === 'gerer-etudiant-form') {
             e.preventDefault(); // Empêche la soumission classique
 
             // Récupérer la valeur saisie
             const recherche = document.getElementById('search-input').value;
-            console.log("Requête de recherche:", recherche); // Affiche la valeur de recherche
 
-            const url = 'admin/gererEtudiants?recherche=' + encodeURIComponent(recherche);
-            console.log("URL de la requête de recherche:", url); // Vérifie l'URL construite
-
-            // Envoie les données à l'URL de recherche
-            fetch(url, {
+            // Envoie les données à la servlet via AJAX
+            fetch('gererEtudiants?recherche=' + encodeURIComponent(recherche), {
                 method: 'GET',
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erreur lors de la récupération des résultats de recherche');
-                    }
-                    response.text()
-                })
+                .then(response => response.text())
                 .then(html => {
-                    console.log("HTML reçu pour la recherche:", html); // Vérifie le contenu HTML de la recherche
                     // Injecte le contenu HTML reçu dans la zone dynamique
                     document.getElementById('dynamic-content').innerHTML = html;
                 })
@@ -123,6 +110,292 @@
                 });
         }
     });
+
+    // Gestionnaire d'envoi de formulaire pour la recherche d'enseignant
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'gerer-enseignant-form') {
+            e.preventDefault(); // Empêche la soumission classique
+
+            // Récupérer la valeur saisie
+            const recherche = document.getElementById('search-input').value;
+
+            // Envoie les données à la servlet via AJAX
+            fetch('gererEnseignants?recherche=' + encodeURIComponent(recherche), {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche:', error);
+                });
+        }
+    });
+
+    // Gestionnaire pour le lien "Retour à la liste" de modifier étudiant et enseignant
+    document.addEventListener('click', function (e) {
+        const target = e.target;
+        if (target.id === 'return-to-list') {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+
+            // Charge la page des étudiants via AJAX
+            fetch('gererEtudiants', {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement de la liste:', error);
+                });
+        }
+    });
+
+    // Gestionnaire d'envoi de formulaire pour la création de compte
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'creation-compte-form') {
+            e.preventDefault(); // Empêche la soumission classique
+
+            // Envoie les données à la servlet via AJAX
+            fetch('/creerCompte', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    typeCompte: form.typeCompte.value,
+                    nom: form.nom.value,
+                    prenom: form.prenom.value,
+                    email: form.email.value,
+                    dateNaissance: form.dateNaissance.value,
+                    mdp: form.mdp.value
+                })
+            })
+                .then(response => response.text())
+                .then(message => {
+                    const content = document.getElementById("dynamic-content");
+                    if (!content) {
+                        console.error("L'élément dynamic-content n'existe pas.");
+                        return;
+                    }
+
+                    // Option stricte pour insérer du texte de manière sécurisée
+                    if (message && message.trim() !== "") {
+                        const content = document.getElementById("dynamic-content");
+                        if (content) {
+                            // Remplacer le contenu du div
+                            content.innerHTML = `
+                        <p>${message}</p>
+                        <center>
+                        <button class="return-home" onclick="loadPage('/creationCompte')">Retour</button>
+                        </center>
+                    `;
+                        }
+                    }})
+                .catch(err => {
+                    console.error('Erreur lors de la création du compte :', err);
+                    document.getElementById('dynamic-content').innerHTML = `
+                <p style="color:red;">Erreur lors de la création du compte</p>
+                <button onclick="loadPage('/creationCompte')">Réessayer</button>
+            `       ;
+                });
+        }
+    });
+
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'modification-etudiant-form') {
+            e.preventDefault();  // Empêche le formulaire de se soumettre de manière classique (page rechargée)
+            // Récupérer la valeur de l'input 'email' à l'intérieur du formulaire
+            const email = form.querySelector('input[name="email"]').value;
+            fetch('/etudiants/modifier', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'email': email
+                })
+            })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        }
+    });
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'save-changes-form') {
+            e.preventDefault(); // Empêche le rechargement de la page
+
+            // Utilisation de FormData pour récupérer toutes les données du formulaire
+            const formData = new FormData(form);
+
+            // Transformation des données en un objet URLSearchParams
+            const body = new URLSearchParams();
+            formData.forEach((value, key) => {
+                body.append(key, value);
+            });
+
+            // Envoi des données via fetch
+            fetch('/etudiants/saveChanges', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: body.toString(),
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Met à jour dynamiquement le contenu de la page
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        }
+    });
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'delete-student-form') {
+            e.preventDefault(); // Empêche le rechargement de la page
+
+            // Confirmation de suppression
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')) {
+                return; // Annule l'action si l'utilisateur ne confirme pas
+            }
+
+            // Récupérer les données du formulaire
+            const formData = new FormData(form);
+
+            // Conversion des données en URLSearchParams
+            const body = new URLSearchParams();
+            formData.forEach((value, key) => {
+                body.append(key, value);
+            });
+
+            // Envoi de la requête via fetch
+            fetch('/etudiants/supprimer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: body.toString(),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Étudiant supprimé avec succès.');
+                    } else {
+                        throw new Error('Erreur lors de la suppression.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                    alert('Une erreur est survenue lors de la suppression.');
+                });
+        }
+    });
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'modification-enseignant-form') {
+            e.preventDefault();  // Empêche le formulaire de se soumettre de manière classique (page rechargée)
+            // Récupérer la valeur de l'input 'email' à l'intérieur du formulaire
+            const email = form.querySelector('input[name="email"]').value;
+            fetch('/enseignants/modifier', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'email': email
+                })
+            })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        }
+    });
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'save-teacher-form') {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const body = new URLSearchParams();
+            formData.forEach((value, key) => {
+                body.append(key, value);
+            });
+
+            fetch('/enseignants/saveChanges', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: body.toString(),
+            })
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        }
+    });
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'delete-teacher-form') {
+            e.preventDefault();
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet enseignant ?')) {
+                return;
+            }
+
+            const formData = new FormData(form);
+            const body = new URLSearchParams();
+            formData.forEach((value, key) => {
+                body.append(key, value);
+            });
+
+            fetch('/enseignants/supprimer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: body.toString(),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Enseignant supprimé avec succès.');
+                    } else {
+                        throw new Error('Erreur lors de la suppression.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors de la suppression.');
+                });
+        }
+    });
+
+
 </script>
 </body>
 </html>
