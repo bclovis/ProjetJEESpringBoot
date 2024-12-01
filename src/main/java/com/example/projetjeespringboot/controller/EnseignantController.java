@@ -2,11 +2,13 @@ package com.example.projetjeespringboot.controller;
 
 import com.example.projetjeespringboot.model.Enseignant;
 import com.example.projetjeespringboot.service.EnseignantService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
@@ -14,12 +16,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 @Controller
+@RequestMapping
 public class EnseignantController {
 
 @Autowired
 private EnseignantService enseignantService;
 
 private static final int PAGE_SIZE = 20;
+
+@GetMapping("/enseignant")
+public String afficherPageEnseignant(HttpSession session, Model model) {
+    String role = (String) session.getAttribute("role");
+    model.addAttribute("role", role);
+    return "enseignant";
+}
 
 @GetMapping("/gererEnseignants")
 public String gererEnseignant(

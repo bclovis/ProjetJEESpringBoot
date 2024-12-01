@@ -56,10 +56,10 @@ public class ReleveNotesGenerator {
                 List<Note> notes = entry.getValue();
 
                 // Moyenne par matière
-                double moyenneMatiere = notes.stream()
+                double moyenneMatiere = (double) Math.round(notes.stream()
                         .mapToDouble(Note::getNote)
                         .average()
-                        .orElse(0);
+                        .orElse(0) * 100) / 100;
                 document.add(new Paragraph(matiere + " (Moyenne : " + moyenneMatiere + " / 20)").setBold().setMarginBottom(10));
 
                 // Créer une table

@@ -51,9 +51,10 @@ public class NoteController {
 
         // Calcul des moyennes par matière
         Map<String, Double> moyennesParMatiere = notesParMatiere.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
-                        .mapToDouble(Note::getNote)
-                        .average().orElse(0)));
+                .collect(Collectors.toMap(Map.Entry::getKey, entry ->
+                        Math.round(entry.getValue().stream()
+                                .mapToDouble(Note::getNote)
+                                .average().orElse(0) * 100.0) / 100.0));
 
         // Calcul de la moyenne générale
         double moyenneGenerale = notes.stream().mapToDouble(Note::getNote).average().orElse(0);

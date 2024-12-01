@@ -29,6 +29,11 @@ public class EtudiantController {
         return "admin";
     }
 
+    @GetMapping("/etudiant")
+    public String afficherPageEtudiant() {
+        return "etudiant";
+    }
+
     @GetMapping("/gererEtudiants")
     public String gererEtudiants(
             @RequestParam(value = "page", defaultValue = "1") int page,
