@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Modifier Enseignant</title>
+  <link rel="stylesheet" th:href="@{/css/modifierEtudiant.css}">
+</head>
+<body>
+<h1>Modifier les informations de l'enseignant</h1>
+<div class="form-container">
+  <form id="save-teacher-form" th:action="@{/enseignants/saveChanges}" method="post">
+    <!-- Champ caché pour l'email -->
+    <input type="hidden" name="email" th:value="${enseignant.email}" />
+
+    <!-- Champ pour le nom -->
+    <label for="nom">Nom :</label>
+    <input type="text" id="nom" name="nom" th:value="${enseignant.nom}" required>
+
+    <!-- Champ pour le prénom -->
+    <label for="prenom">Prénom :</label>
+    <input type="text" id="prenom" name="prenom" th:value="${enseignant.prenom}" required>
+
+    <!-- Champ pour la date de naissance -->
+    <label for="dateNaissance">Date de Naissance :</label>
+    <input type="date" id="dateNaissance" name="dateNaissance" th:value="${enseignant.dateNaissance != null ? #dates.format(enseignant.dateNaissance, 'yyyy-MM-dd') : ''}" required>
+
+    <!-- Champ pour le mot de passe -->
+    <label for="mdp">Mot de Passe :</label>
+    <input type="password" id="mdp" name="mdp" th:value="${enseignant.mdp}" required>
+    <br><br>
+
+    <!-- Bouton pour soumettre -->
+    <button type="submit">Modifier</button>
+
+    <!-- Lien pour revenir à la liste -->
+    <a id="return-to-list" href="#" class="return-home">Retour à la liste</a>
+  </form>
+</div>
+</body>
+</html>

@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -5,66 +6,62 @@
   <link rel="stylesheet" th:href="@{/css/gererEtudiant.css}">
 </head>
 <body>
-<h1>Liste des Étudiants</h1>
+  <h1>Liste des Étudiants</h1>
 
-<!-- Barre de recherche -->
-<div class="search-bar">
-  <form id="gerer-etudiant-form" th:action="@{/gererEtudiants}" method="get">
-    <input type="text" id="search-input" name="recherche" th:value="${recherche}" placeholder="Rechercher un étudiant...">
-    <button type="submit">Rechercher</button>
-  </form>
-</div>
-
-  <!-- Affichage des étudiants -->
-  <table>
-    <thead>
-    <tr>
-      <th>Email</th>
-      <th>Nom</th>
-      <th>Prénom</th>
-      <th>Date de Naissance</th>
-      <th>Filière</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-      <!-- Vérification si la liste des étudiants est vide -->
-      <tr th:if="${etudiants.empty}">
-        <td colspan="6">Aucun étudiant trouvé.</td>
-      </tr>
-
-      <tr th:each="etudiant : ${etudiants}">
-        <td th:text="${etudiant.email}"></td>
-        <td th:text="${etudiant.nom}"></td>
-        <td th:text="${etudiant.prenom}"></td>
-        <td th:text="${#dates.format(etudiant.dateNaissance, 'dd/MM/yyyy')}"></td> <!-- Formatage de la date -->
-        <td th:text="${etudiant.filiere}"></td>
-        <td>
-          <button class="btn btn-primary" th:attr="data-email=${etudiant.email}"  onclick="ouvrirFormModifier(this)">ModifierTest</button>
-          <button class="btn btn-primary" th:attr="data-email=${etudiant.email}" onclick="">SupprimerTest</button>
-          <form method="post" action="@{/modifierEtudiant}">
-            <input type="hidden" name="email" th:value="${etudiant.email}" />
-            <button type="submit">Modifier</button>
-          </form>
-          <form method="post" th:action="@{/supprimerEtudiant}">
-            <input type="hidden" name="email" th:value="${etudiant.email}" />
-            <button type="submit">Supprimer</button>
-          </form>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Pagination -->
-  <div class="pagination">
-    <span th:each="i : ${#numbers.sequence(1, totalPages)}">
-      <a th:href="@{/gererEtudiants(page=${i}, recherche=${recherche})}"
-         th:classappend="${i == currentPage} ? 'current-page'">
-         <span th:text="${i}"></span>
-      </a>
-    </span>
+  <!-- Barre de recherche -->
+  <div class="search-bar">
+    <form id="gerer-etudiant-form" action="#" method="get">
+      <input type="text" id="search-input" name="recherche" th:value="${recherche}" placeholder="Rechercher un étudiant...">
+      <button type="submit">Rechercher</button>
+    </form>
   </div>
 
-  <a th:href="@{/admin}"class="return-home">Retour à l'accueil</a>
-  </body>
+    <!-- Affichage des étudiants -->
+    <table>
+      <thead>
+      <tr>
+        <th>Email</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Date de Naissance</th>
+        <th>Filière</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        <!-- Vérification si la liste des étudiants est vide -->
+        <tr th:if="${etudiants.empty}">
+          <td colspan="6">Aucun étudiant trouvé.</td>
+        </tr>
+
+        <tr th:each="etudiant : ${etudiants}">
+          <td th:text="${etudiant.email}"></td>
+          <td th:text="${etudiant.nom}"></td>
+          <td th:text="${etudiant.prenom}"></td>
+          <td th:text="${#dates.format(etudiant.dateNaissance, 'dd/MM/yyyy')}"></td> <!-- Formatage de la date -->
+          <td th:text="${etudiant.filiere}"></td>
+          <td>
+            <form id="modification-etudiant-form" method="post" action="#">
+              <input type="hidden" name="email" th:value="${etudiant.email}" />
+              <button type="submit">Modifier</button>
+            </form>
+            <form id="delete-student-form" method="post" th:action="@{/etudiants/supprimer}">
+              <input type="hidden" name="email" th:value="${etudiant.email}" />
+              <button type="submit">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{/gererEtudiants(page=${i}, recherche=${recherche})}"
+           th:classappend="${i == currentPage} ? 'current-page'">
+           <span th:text="${i}"></span>
+        </a>
+      </span>
+    </div>
+</body>
 </html>

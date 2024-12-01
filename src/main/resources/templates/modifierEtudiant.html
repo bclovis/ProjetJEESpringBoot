@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Modifier Étudiant</title>
+  <link rel="stylesheet" th:href="@{/css/modifierEtudiant.css}">
+</head>
+<body>
+<h1>Modifier les informations de l'étudiant</h1>
+<div class="form-container">
+  <form method="post" id="save-changes-form" th:action="@{/etudiants/saveChanges}"  th:object="${etudiant}">
+    <!-- L'email est un champ masqué pour identifier l'étudiant -->
+    <input type="hidden" name="email" th:value="${etudiant.email}" />
+
+    <label for="nom">Nom :</label>
+    <input type="text" id="nom" name="nom" th:value="${etudiant.nom}" required>
+
+    <label for="prenom">Prénom :</label>
+    <input type="text" id="prenom" name="prenom" th:value="${etudiant.prenom}" required>
+
+    <label for="dateNaissance">Date de Naissance :</label>
+    <input type="date" id="dateNaissance" name="dateNaissance"
+           th:value="${etudiant.dateNaissance != null ? #dates.format(etudiant.dateNaissance, 'yyyy-MM-dd') : ''}" required>
+
+    <label for="mdp">Mot de Passe :</label>
+    <input type="password" id="mdp" name="mdp" th:value="${etudiant.mdp}" required>
+    <br><br>
+
+    <button type="submit">Enregistrer les modifications</button>
+    <a id="return-to-list" href="#" class="return-home">Retour à la liste</a>
+  </form>
+</div>
+</body>
+</html>

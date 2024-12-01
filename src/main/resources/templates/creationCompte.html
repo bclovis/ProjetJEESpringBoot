@@ -19,7 +19,7 @@
 </div>
 
 <!-- Formulaire de création de compte -->
-<form id="creation-compte-form" th:action="@{/creerCompte}" method="post">
+<form id="creation-compte-form" action="#" method="post">
     <label for="typeCompte">Type de compte :</label>
     <select name="typeCompte" id="typeCompte" required>
         <option value="etudiant" th:selected="${typeCompte == 'etudiant'}">Étudiant</option>

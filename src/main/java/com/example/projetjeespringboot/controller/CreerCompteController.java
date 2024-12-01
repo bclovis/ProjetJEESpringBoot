@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Calendar;
 
 @Controller
 public class CreerCompteController {
@@ -75,10 +77,10 @@ public class CreerCompteController {
                 compteService.createEnseignant(enseignant);
             }
             model.addAttribute("success", "Compte créé avec succès.");
-            return "creationCompte";
+            return "creationCompte"; // Retourne à la page de création de compte avec message de succès
         } catch (Exception e) {
             model.addAttribute("error", "Erreur lors de la création du compte.");
-            return "creationCompte";
+            return "creationCompte"; // Retourne avec un message d'erreur
         }
     }
 }

@@ -113,3 +113,18 @@ body {
 .logout-form button{
     margin-bottom: 0;
 }
+
+.return-home{
+    height: 38px; /* Hauteur uniforme avec les boutons */
+    padding: 0 12px; /* Espacement interne horizontal */
+    background-color: #4CAF50; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    border-radius: 4px; /* Coins arrondis */
+    cursor: pointer; /* Curseur en forme de main */
+    line-height: 38px; /* Aligne verticalement le texte */
+    display: inline-block;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}

@@ -63,22 +63,25 @@ tr:hover {
     cursor: pointer;
 }
 
+/* Alignement horizontal des formulaires */
+td form {
+    display: inline-block; /* Les formulaires seront alignés côte à côte */
+    margin-right: 2px; /* Espacement entre les formulaires */
+}
+
 /* Boutons d'actions */
-table .btn {
+table button {
     padding: 5px 10px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 13px;
     text-align: center;
-}
-
-table .btn-primary {
     background-color: #0056b3;
     color: white;
 }
 
-table .btn-primary:hover {
+table button:hover {
     background-color: #003f7f;
 }
 
@@ -107,20 +110,4 @@ table .btn-primary:hover {
     font-weight: bold;
     background-color: #0056b3;
     color: white;
-}
-
-.return-home{
-    display: inline-block; /* Permet de simuler l'apparence d'un bouton */
-    height: 38px; /* Hauteur uniforme avec les boutons */
-    padding: 0 12px; /* Espacement interne horizontal */
-    background-color: #4CAF50; /* Couleur de fond */
-    color: white; /* Couleur du texte */
-    border: none; /* Pas de bordure */
-    border-radius: 4px; /* Coins arrondis */
-    font-size: 14px; /* Taille de police */
-    cursor: pointer; /* Curseur en forme de main */
-    line-height: 38px; /* Aligne verticalement le texte */
-    text-align: center; /* Centre le texte */
-    text-decoration: none; /* Supprime le soulignement */
-    margin-bottom: 20px;
 }

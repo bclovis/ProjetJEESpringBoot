@@ -2,44 +2,49 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
-    <link rel="stylesheet" href="CSS/login.css">
+    <title>Login</title>
+    <!-- Utilisation de th:href pour charger le CSS depuis le répertoire /static -->
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+
 </head>
 <body>
-    <img src="images/Logo_Projet_JEE.PNG" alt="Logo" class="logo">
-    <h2>Log In</h2>
+<img th:src="@{/images/Logo_Projet_JEE.PNG}" alt="Logo" class="logo">
 
-    <form th:action="@{/login}" method="post">
-        <div class="form-group">
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" required>
-            <br><br>
-        </div>
+<h2>Log In</h2>
 
-        <div class="form-group">
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" required>
-            <br><br>
-        </div>
+<!-- Affichage du message d'erreur en cas d'échec de connexion -->
+<div th:if="${error}" class="error-message">
+    <p th:text="${error}"></p>
+</div>
 
-        <div class="radio-group">
-            <label>Rôle :</label>
-            <input type="radio" id="etudiant" name="role" value="etudiant" required>
-            <label for="etudiant">Étudiant</label>
-
-            <input type="radio" id="enseignant" name="role" value="enseignant">
-            <label for="enseignant">Enseignant</label>
-
-            <input type="radio" id="admin" name="role" value="admin">
-            <label for="admin">Administrateur</label>
-            <br><br>
-        </div>
-
-        <button type="submit">Se connecter</button>
-    </form>
-    <!-- Affichage du message d'erreur en cas d'échec de connexion -->
-    <div th:if="${error}" class="error-message">
-        <p th:text="${error}"></p>
+<form th:action="@{/login}" method="post">
+    <div class="form-group">
+        <label for="email">Email :</label>
+        <input type="email" id="email" name="email" required>
+        <br><br>
     </div>
+
+    <div class="form-group">
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+    </div>
+
+    <div class="radio-group">
+        <label>Rôle :</label>
+        <input type="radio" id="admin" name="role" value="admin" required>
+        <label for="admin">Admin</label><br>
+
+        <input type="radio" id="etudiantService" name="role" value="enseignant" required>
+        <label for="etudiantService">Enseignant</label><br>
+
+        <input type="radio" id="etudiant" name="role" value="etudiant" required>
+        <label for="etudiant">Etudiant</label>
+        <br><br>
+    </div>
+
+    <button type="submit">Se connecter</button>
+</form>
+
 </body>
 </html>
