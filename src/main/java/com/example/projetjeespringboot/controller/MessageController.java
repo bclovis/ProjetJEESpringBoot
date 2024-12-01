@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ public class MessageController {
     }
 
     @PostMapping("/messagerie/send")
+    @Transactional
     public String sendMessage(
             HttpSession session,
             @RequestParam String recipient,
@@ -33,13 +35,13 @@ public class MessageController {
             Model model
     ) {
         // Récupération de l'utilisateur connecté
-        String sender = (String) session.getAttribute("userEmail");
+        String sender = (String) session.getAttribute("email");
         if (sender == null) {
             return "redirect:/login";
         }
         if (content == null || content.trim().isEmpty()) {
             model.addAttribute("errorMessage", "Le contenu ne peut pas être vide.");
-            return "messagerie";
+            return getMessages(session, model, 1);
         }
 
         // Vérifier si le destinataire existe
@@ -61,23 +63,15 @@ public class MessageController {
 
         if (!emailExists) {
             session.setAttribute("confirmationMessage", "L'email du destinataire n'existe pas.");
-            return "messagerie";
+            return getMessages(session, model, 1);
         }
 
         // Création et sauvegarde du message
         Message message = new Message(sender, recipient, subject, content, LocalDateTime.now());
-        try {
-            entityManager.getTransaction().begin();
-            entityManager.persist(message);
-            entityManager.getTransaction().commit();
-            session.setAttribute("confirmationMessage", "Le message a été envoyé avec succès à " + recipient + ".");
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            e.printStackTrace();
-            session.setAttribute("confirmationMessage", "Erreur lors de l'envoi du message. Veuillez réessayer.");
-        }
+        entityManager.persist(message);
+        session.setAttribute("confirmationMessage", "Le message a été envoyé avec succès à " + recipient + ".");
 
-        return "messagerie";
+        return getMessages(session, model, 1);
     }
 
     @GetMapping("/messagerie")

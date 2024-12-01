@@ -38,11 +38,9 @@
       <textarea id="content" name="content" rows="5" placeholder="Écrivez votre message ici..." required></textarea>
 
       <button type="submit">Envoyer</button>
+      <center><a th:href="${role == 'etudiant' ? '/etudiant' : (role == 'enseignant' ? '/enseignant' : '/login')}" class="return-home">Retour à l'accueil</a></center>
     </form>
   </div>
-
-
-  <a th:href="${role == 'etudiant' ? '/etudiant' : (role == 'enseignant' ? '/enseignant' : '/login')}" class="return-home">Retour à l'accueil</a>
 </div>
 </body>
 </html>

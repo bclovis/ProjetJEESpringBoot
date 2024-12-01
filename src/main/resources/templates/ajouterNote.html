@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Ajouter une Note</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/ajouterNote.css}">
 </head>
 <body>
 <h1>Ajouter une Note</h1>
 
 <!-- Affichage des messages -->
-<div th:if="${success}" style="color: green;">[[${success}]]</div>
-<div th:if="${error}" style="color: red;">[[${error}]]</div>
+<center><div th:if="${success}" style="color: green;" class="message success">[[${success}]]</div></center>
+<center><div th:if="${error}" style="color: red;" class="message error">[[${error}]]</div></center>
 
 <!-- Formulaire -->
 <form th:action="@{/notes/ajouter}" method="post">
