@@ -14,7 +14,7 @@
     <p th:class="${messageClass}" th:text="${message}"></p>
 </div>
 
-<form th:action="@{/deplacerCours}" method="post" class="deplace-form">
+<form id="deplacer-cours-form" th:action="@{/deplacerCours}" method="post" class="deplace-form">
     <!-- Cours ID caché -->
     <input type="hidden" name="coursId" th:value="${cours.id}" />
 
@@ -43,7 +43,7 @@
     <br><br>
 
     <!-- Retour à l'accueil -->
-    <a href="/admin" class="return-home">Retour à l'accueil</a>
+    <a id="return-to-edt" href="#" class="return-home">Retour à l'emploi du temps</a>
 </form>
 
 </body>

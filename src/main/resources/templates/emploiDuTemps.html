@@ -28,7 +28,7 @@
         </select>
     </div>
 
-    <button type="submit">Afficher l'emploi du temps</button>
+    <button type="submit" onclick="attachDynamicListeners()">Afficher l'emploi du temps</button>
 </form>
 
 <!-- Tableau pour afficher l'emploi du temps -->
@@ -60,14 +60,14 @@
                 <!-- Bouton Déplacer -->
                 <form th:action="@{/deplacerCoursForm}" method="get" style="display:inline;">
                     <input type="hidden" name="coursId" th:value="${emploiIdParJourEtHeure.get(jour).get(heure)}" />
-                    <button type="submit">Déplacer</button>
+                    <button type="submit" onclick="attachDynamicListeners()">Déplacer</button>
                 </form>
 
                 <form th:action="@{/supprimerCours}" method="post" style="display:inline;">
                     <input type="hidden" name="coursId" th:value="${emploiIdParJourEtHeure.get(jour).get(heure)}" />
                     <input type="hidden" name="jour" th:value="${jour}" />
                     <input type="hidden" name="heure" th:value="${heure}" />
-                    <button type="submit">Supprimer</button>
+                    <button type="submit" onclick="attachDynamicListeners()">Supprimer</button>
                 </form>
 
             </div>
@@ -77,7 +77,7 @@
 </table>
 
 <!-- Bouton flottant pour ajouter un cours -->
-<a href="/ajouterCours" class="add-course-button" title="Ajouter un cours">Ajouter un cours</a>
+<a id="add-course" href="#" class="add-course-button" title="Ajouter un cours" onclick="attachDynamicListeners()">Ajouter un cours</a>
 
 <!-- Retour à l'accueil -->
 <a href="admin" class="return-home">Retour à l'accueil</a>

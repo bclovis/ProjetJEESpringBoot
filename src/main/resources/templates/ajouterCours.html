@@ -17,7 +17,7 @@
     <p th:text="${error}"></p>
 </div>
 
-<form action="#" th:action="@{/ajouterCours}" method="post">
+<form class="form-deplacer" action="#" th:action="@{/ajouterCours}" method="post">
     <label for="filiere">Filière :</label>
     <select id="filiere" name="filiere" required>
         <option th:each="filiere : ${filieres}" th:value="${filiere.nom}" th:text="${filiere.nom}"></option>
@@ -56,7 +56,7 @@
 
     <button type="submit">Ajouter</button>
     <br><br>
-    <a href="admin" class="return-home">Retour à l'accueil</a>
+    <a id="return-to-edt" href="#" class="return-home">Retour à l'accueil</a>
 </form>
 </body>
 </html>

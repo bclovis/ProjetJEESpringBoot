@@ -38,7 +38,7 @@ public class DeplacerCoursController {
             // Si un conflit est trouvé, renvoyer un message d'erreur
             model.addAttribute("message", "Le créneau est déjà occupé par un autre cours.");
             model.addAttribute("cours", cours); // Repasser les informations du cours
-            model.addAttribute("messageClass", "error"); // Classe pour afficher l'erreur en rouge
+            //model.addAttribute("messageClass", "error"); // Classe pour afficher l'erreur en rouge
             return "deplacerCours";  // Retourner au formulaire
         }
 
@@ -54,6 +54,6 @@ public class DeplacerCoursController {
         }
 
         // Redirection vers l'emploi du temps avec la filière dynamique et semaine
-        return "redirect:/emploiDuTemps?semaine=" + semaine + "&filiere=Mathématiques";  // Redirige vers semaine et filière Mathématiques
+        return "redirect:/emploiDuTemps?semaine=" + semaine + "&filiere=" + cours.getFiliere().toString();  // Redirige vers semaine et filière Mathématiques
     }
 }

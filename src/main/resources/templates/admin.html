@@ -245,6 +245,50 @@
         }
     });
 
+    // Gestionnaire pour le lien "Retour à l'emploi du temps de voir edt
+    document.addEventListener('click', function (e) {
+        const target = e.target;
+        if (target.id === 'return-to-edt') {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+
+            // Charge la page des étudiants via AJAX
+            fetch('emploiDuTemps', {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement de la liste:', error);
+                });
+        }
+    });
+
+
+    // Gestionnaire pour le lien "Retour à l'emploi du temps de voir edt
+    document.addEventListener('click', function (e) {
+        const target = e.target;
+        if (target.id === 'add-course') {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+
+            // Charge la page des étudiants via AJAX
+            fetch('ajouterCours', {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement de la liste:', error);
+                });
+        }
+    });
+
+
     // Gestionnaire d'envoi de formulaire pour la création de compte
     document.addEventListener('submit', function (e) {
         const form = e.target;
@@ -608,7 +652,92 @@
             });
     }
 
+    // Fonction pour intercepter la pagination dans le contenu dynamique
+    function attachDynamicListeners() {
+        // Interception des soumissions de formulaires
+        document.querySelectorAll('#dynamic-content form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Empêche le rechargement de la page
+                const formData = new FormData(this);
+                const method = this.getAttribute('method')?.toUpperCase() || 'POST'; // Par défaut POST
+                const action = this.getAttribute('action');
 
+                if (method === 'GET') {
+                    // Gestion des requêtes GET
+                    const query = new URLSearchParams(formData).toString();
+                    fetch(`${action}?${query}`)
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('dynamic-content').innerHTML = html;
+                            attachDynamicListeners(); // Réattache les événements
+                        })
+                        .catch(err => console.error('Erreur lors de l’envoi du formulaire (GET) :', err));
+                } else {
+                    // Gestion des requêtes POST
+                    fetch(action, {
+                        method: method,
+                        body: formData
+                    })
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('dynamic-content').innerHTML = html;
+                            attachDynamicListeners(); // Réattache les événements
+                        })
+                        .catch(err => console.error('Erreur lors de l’envoi du formulaire (POST) :', err));
+                }
+            });
+        });
+    }
+
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+
+        // Vérifie si le formulaire soumis est celui pour déplacer un cours
+        if (form.id === 'deplacer-cours-form') {
+            e.preventDefault(); // Empêche le comportement par défaut du formulaire (rechargement de page)
+
+            // Récupérer les données du formulaire
+            const coursId = form.querySelector('input[name="coursId"]').value;
+            const jour = form.querySelector('select[name="jour"]').value;
+            const heure = form.querySelector('select[name="heure"]').value;
+            const semaine = form.querySelector('input[name="semaine"]').value;
+
+            // Prépare les données pour la requête
+            const params = new URLSearchParams({
+                coursId: coursId,
+                jour: jour,
+                heure: heure,
+                semaine: semaine
+            });
+
+            // Effectue une requête POST via Fetch
+            fetch('/deplacerCours', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params.toString()
+            })
+                .then(response => {
+                    if (response.redirected) {
+                        // Si le serveur renvoie une redirection, redirige le navigateur
+                        window.location.href = response.url;
+                    } else {
+                        // Sinon, traite la réponse normalement (par exemple, affiche un message d'erreur ou de succès)
+                        return response.text();
+                    }
+                })
+                .then(html => {
+                    // Si le serveur a renvoyé du HTML, affiche-le dans une section dynamique (si nécessaire)
+                    if (html) {
+                        document.getElementById('dynamic-content').innerHTML = html;
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        }
+    });
 </script>
 </body>
 </html>

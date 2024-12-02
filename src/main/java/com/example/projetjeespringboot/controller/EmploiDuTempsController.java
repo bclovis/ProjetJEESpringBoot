@@ -99,7 +99,8 @@ public class EmploiDuTempsController {
         model.addAttribute("heures", new String[]{"08h-10h", "10h-12h", "12h-14h", "14h-16h", "16h-18h"});  // Liste des heures
 
         // Retourner à l'emplois du temps de la semaine 1 et de la filière Mathématiques
-        return "emploiDuTemps"; // Assurez-vous que la vue est rechargée avec les données mises à jour
+        //return "emploiDuTemps"; // Assurez-vous que la vue est rechargée avec les données mises à jour
+        return "redirect:/emploiDuTemps"; // Redirection vers le @GetMapping
     }
 
     // Méthode pour afficher le formulaire de déplacement
