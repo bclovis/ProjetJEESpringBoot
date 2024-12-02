@@ -11,9 +11,9 @@
 <div class="header">
     <img th:src="@{/images/Logo_Projet_JEE.PNG}" alt="Logo Université" class="logo">
     <div class="icons">
-        <span class="icon"><i class="fa-solid fa-circle-user"></i></span>  <!-- Icône du compte utilisateur -->
+        <span class="icon"><i class="fa-solid fa-circle-user"></i></span> <!-- Icône du compte utilisateur -->
         <!-- Déconnexion avec action via Spring Boot -->
-        <form class="logout-form" th:action="@{/logout}" method="post" style="display:inline;">
+        <form class="logout-form" th:action="@{/logout}" method="post" style="display:inline;" onsubmit="return handleLogout(event)">
             <button type="submit" class="icon" title="Déconnexion">
                 <i class="fa-solid fa-power-off"></i> <!-- Icône de déconnexion -->
             </button>
@@ -26,10 +26,10 @@
     <!-- Menu latéral gauche -->
     <nav class="sidebar">
         <ul>
-            <li><a href="#" data-page="AfficherEDTEtuEns">Consulter mon emploi du temps</a></li>
-            <li><a href="#" data-page="messagerie">Accéder à ma messagerie</a></li>
-            <li><a href="#" data-page="voirNotes">Voir mes notes</a></li>
-            <li><a href="#" data-page="demandeFiliere">Faire une demande de choix de filière</a></li>
+            <li><a href="" data-page="AfficherEDTEtuEns">Consulter mon emploi du temps</a></li>
+            <li><a href="" data-page="messagerie">Accéder à ma messagerie</a></li>
+            <li><a href="" data-page="voirNotes">Voir mes notes</a></li>
+            <li><a href="" data-page="demandeFiliere">Faire une demande de choix de filière</a></li>
         </ul>
     </nav>
 
@@ -42,12 +42,35 @@
 </div>
 
 <script>
+
+    // Fonction pour gérer la déconnexion et rediriger vers la page de connexion
+    function handleLogout(event) {
+        event.preventDefault(); // Empêche le rechargement de la page
+
+        const form = event.target; // Récupère le formulaire
+
+        fetch(form.getAttribute('action'), {
+            method: form.getAttribute('method') || 'POST', // Méthode par défaut POST
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Si la déconnexion est réussie, redirige vers la page de connexion
+                    window.location.href = '/login'; // Remplacez '/login' par l'URL réelle de votre page de connexion
+                } else {
+                    console.error('Erreur lors de la déconnexion');
+                }
+            })
+            .catch(err => console.error('Erreur lors de la requête de déconnexion :', err));
+
+        return false; // Empêche la soumission native
+    }
     // Fonction pour gérer le chargement dynamique des pages
     function loadPage(page) {
         fetch(page)
             .then(response => response.text())
             .then(html => {
                 document.getElementById('dynamic-content').innerHTML = html;
+                attachDynamicListeners(); // Réattache les événements après le chargement
             })
             .catch(err => console.error('Erreur lors du chargement de la page :', err));
     }
@@ -62,6 +85,82 @@
             }
         });
     });
+
+    // Fonction pour intercepter la pagination dans le contenu dynamique
+    function attachDynamicListeners() {
+        // Événements pour les boutons de pagination
+        document.querySelectorAll('#dynamic-content .pagination a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Empêche le rechargement de la page
+                const page = this.getAttribute('data-page');
+                if (page) {
+                    loadPage(`/messagerie?page=${page}`); // Charge la page correspondante
+                }
+            });
+        });
+
+        // Bouton spécifique pour télécharger les notes
+        const downloadButton = document.querySelector('#dynamic-content .download-releve');
+        if (downloadButton) {
+            downloadButton.addEventListener('click', downloadReleve);
+        }
+
+        // Interception des soumissions de formulaires
+        document.querySelectorAll('#dynamic-content form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Empêche le rechargement de la page
+                const formData = new FormData(this);
+                const method = this.getAttribute('method')?.toUpperCase() || 'POST'; // Par défaut POST
+                const action = this.getAttribute('action');
+
+                if (method === 'GET') {
+                    // Gestion des requêtes GET
+                    const query = new URLSearchParams(formData).toString();
+                    fetch(`${action}?${query}`)
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('dynamic-content').innerHTML = html;
+                            attachDynamicListeners(); // Réattache les événements
+                        })
+                        .catch(err => console.error('Erreur lors de l’envoi du formulaire (GET) :', err));
+                } else {
+                    // Gestion des requêtes POST
+                    fetch(action, {
+                        method: method,
+                        body: formData
+                    })
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('dynamic-content').innerHTML = html;
+                            attachDynamicListeners(); // Réattache les événements
+                        })
+                        .catch(err => console.error('Erreur lors de l’envoi du formulaire (POST) :', err));
+                }
+            });
+        });
+    }
+
+    function downloadReleve() {
+        fetch('/downloadReleve', {
+            method: 'GET',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors du téléchargement');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'releve_notes.pdf';
+                link.click();
+            })
+            .catch(err => console.error('Erreur lors du téléchargement :', err));
+    }
+
+    // Initialisation
+    attachDynamicListeners();
 </script>
 </body>
 </html>

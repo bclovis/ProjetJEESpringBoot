@@ -31,7 +31,7 @@ body {
     align-items: center;
 }
 
-.header .icon {
+.header .icon{
     margin-left: 15px;
     cursor: pointer;
     border: none;
@@ -93,6 +93,3 @@ body {
     background-color: #ffffff;
 }
 
-.header .icons .icon i {
-    font-size: 30px; /* Ajustez la taille selon votre préférence */
-}
