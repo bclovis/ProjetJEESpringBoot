@@ -3,6 +3,7 @@ package com.example.projetjeespringboot.controller;
 import com.example.projetjeespringboot.model.Matiere;
 import com.example.projetjeespringboot.repository.MatiereRepository;
 import com.example.projetjeespringboot.service.AjouterNoteService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +22,16 @@ public class AjouterNoteController {
     private MatiereRepository matiereRepository;
 
     @GetMapping("/ajouter")
-    public String afficherFormulaireAjout(
-            @SessionAttribute("email") String emailProf,
-            Model model) {
+    public String afficherFormulaireAjout(HttpSession session,
+                                          Model model) {
+
+        String role = (String) session.getAttribute("role");
+        String emailProf = (String) session.getAttribute("email");
+
+        // Vérifier si l'utilisateur est connecté
+        if (role == null || emailProf == null) {
+            return "redirect:/login"; // Rediriger vers la page de connexion si non connecté
+        }
         // Récupérer les matières enseignées par le professeur connecté
         List<Matiere> matieres = matiereRepository.findByProfesseurEmail(emailProf);
 

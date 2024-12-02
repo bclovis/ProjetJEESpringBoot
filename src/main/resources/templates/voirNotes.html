@@ -62,16 +62,28 @@
         </table>
     </div>
 
-    <!-- Formulaire pour télécharger le relevé de notes -->
+    <!-- Bouton Télécharger -->
     <div class="actions">
-        <form action="/downloadReleve" method="get">
-            <input type="hidden" name="action" value="download">
-            <button type="submit">Télécharger le relevé de notes</button>
-        </form>
-
-        <!-- Bouton aligné à droite -->
-        <button onclick="window.location.href='/etudiant'">Retour à l'accueil</button>
+        <button class="download-releve" onclick="downloadAndRedirect()">Télécharger le relevé de notes</button>
     </div>
 </div>
+
+<!-- Script pour gérer le téléchargement et la redirection -->
+<script>
+    function downloadAndRedirect() {
+        // Créez un lien invisible pour télécharger le fichier
+        const link = document.createElement('a');
+        link.href = '/downloadReleve'; // URL de l'action pour télécharger le relevé
+        link.download = 'releve_notes.pdf'; // Nom du fichier
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Redirigez vers la page des notes après un délai
+        setTimeout(() => {
+            window.location.href = '/voirNotes';
+        }, 1000); // 1 seconde pour être sûr que le téléchargement a démarré
+    }
+</script>
 </body>
 </html>

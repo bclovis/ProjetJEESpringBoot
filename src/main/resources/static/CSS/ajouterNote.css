@@ -3,13 +3,11 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     margin: 0;
-    padding: 20px;
     color: #333;
 }
 
 /* Titre principal */
 h1 {
-    text-align: center;
     color: #000000;
     margin-bottom: 20px;
 }
@@ -34,18 +32,6 @@ h1 {
     background-color: #f2dede;
     color: #a94442;
 }
-
-
-/* Formulaire */
-form {
-    width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
 /* Labels */
 form label {
     display: block;
@@ -81,22 +67,4 @@ form button {
 
 form button:hover {
     background-color: #45a049;
-}
-
-/* Bouton retour à l'accueil */
-a.button {
-    display: inline-block;
-    width: auto;
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border-radius: 4px;
-    text-decoration: none;
-    font-size: 14px;
-    text-align: center;
-    margin-top: 20px;
-}
-
-a.button:hover {
-    background-color: #004494;
 }

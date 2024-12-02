@@ -24,7 +24,7 @@ public class GererDemandeFiliereController {
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "recherche", required = false) String keyword) {
         List<DemandeFiliere> demandes = demandeFiliereService.findDemandes(page, keyword);
-        int totalPages = demandeFiliereService.getTotalPages(keyword);
+        int totalPages = Math.max(demandeFiliereService.getTotalPages(keyword), 1);
 
         model.addAttribute("demandes", demandes);
         model.addAttribute("currentPage", page);

@@ -21,6 +21,11 @@ body {
     width: auto;
 }
 
+
+.logout-form button{
+    margin-bottom: 0;
+}
+
 .header .icons {
     display: flex;
     align-items: center;

@@ -13,9 +13,9 @@
 <h2>Log In</h2>
 
 <!-- Affichage du message d'erreur en cas d'échec de connexion -->
-<div th:if="${error}" class="error-message">
+<center><div th:if="${error}" class="error-message">
     <p th:text="${error}"></p>
-</div>
+</div></center>
 
 <form th:action="@{/login}" method="post">
     <div class="form-group">

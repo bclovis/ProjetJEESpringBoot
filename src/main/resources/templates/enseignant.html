@@ -3,21 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Espace Enseignant</title>
-    <!-- Utilisation de th:href pour le CSS -->
     <link rel="stylesheet" th:href="@{CSS/enseignant.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <!-- Barre de navigation -->
 <div class="header">
-    <!-- Logo -->
     <img th:src="@{/images/Logo_Projet_JEE.PNG}" alt="Logo Université" class="logo">
     <div class="icons">
-        <!-- Icône du compte utilisateur -->
         <span class="icon"><i class="fa-solid fa-circle-user"></i></span>
-
-        <!-- Formulaire de déconnexion -->
-        <form th:action="@{/logout}" method="post" style="display:inline;">
+        <form class="logout-form" th:action="@{/logout}" method="post" style="display:inline;" onsubmit="return handleLogout(event)">
             <button type="submit" class="icon" title="Déconnexion">
                 <i class="fa-solid fa-power-off"></i>
             </button>
@@ -30,17 +25,122 @@
     <!-- Menu latéral gauche -->
     <nav class="sidebar">
         <ul>
-            <li><a th:href="@{/notes/ajouter}">Ajouter une note</a></li>
-            <li><a th:href="@{/AfficherEDTEtuEns}">Voir mon emploi du temps</a></li>
-            <li><a th:href="@{/messagerie}">Accéder à ma messagerie</a></li>
+            <li><a href="" data-page="/notes/ajouter">Ajouter une note</a></li>
+            <li><a href="" data-page="/AfficherEDTEtuEns">Voir mon emploi du temps</a></li>
+            <li><a href="" data-page="/messagerie">Accéder à ma messagerie</a></li>
         </ul>
     </nav>
 
     <!-- Zone de contenu principale -->
     <div class="content-area">
-        <h1>Bienvenue sur l'espace enseignant</h1>
-        <p>Sélectionnez une option à gauche pour afficher les informations.</p>
+        <h1 id="default-message">Bienvenue sur l'espace enseignant</h1>
+        <p id="default-message-paragraph">Sélectionnez une option à gauche pour afficher les informations.</p>
+        <div id="dynamic-content"></div>
     </div>
 </div>
+
+<script>
+    // Fonction pour gérer la déconnexion et rediriger vers la page de connexion
+    function handleLogout(event) {
+        event.preventDefault(); // Empêche le rechargement de la page
+
+        const form = event.target; // Récupère le formulaire
+
+        fetch(form.getAttribute('action'), {
+            method: form.getAttribute('method') || 'POST', // Méthode par défaut POST
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Si la déconnexion est réussie, redirige vers la page de connexion
+                    window.location.href = '/login'; // Remplacez '/login' par l'URL réelle de votre page de connexion
+                } else {
+                    console.error('Erreur lors de la déconnexion');
+                }
+            })
+            .catch(err => console.error('Erreur lors de la requête de déconnexion :', err));
+
+        return false; // Empêche la soumission native
+    }
+
+    // Fonction pour gérer le chargement dynamique des pages
+    function loadPage(page) {
+        fetch(page)
+            .then(response => {
+                if (response.redirected) {
+                    // Si une redirection est détectée (ex : utilisateur déconnecté), redirige vers la page cible
+                    window.location.href = response.url;
+                } else {
+                    return response.text();
+                }
+            })
+            .then(html => {
+                document.getElementById('dynamic-content').innerHTML = html;
+                attachDynamicListeners(); // Réattache les événements après le chargement
+            })
+            .catch(err => console.error('Erreur lors du chargement de la page :', err));
+    }
+
+    // Ajoute un écouteur d'événement à chaque lien du menu
+    document.querySelectorAll('.sidebar a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+            const page = this.getAttribute('data-page'); // Récupère le nom de la page cible
+            if (page) {
+                loadPage(page); // Charge la page via AJAX
+            }
+        });
+    });
+
+    // Fonction pour intercepter la pagination dans le contenu dynamique
+    function attachDynamicListeners() {
+        // Événements pour les boutons de pagination
+        document.querySelectorAll('#dynamic-content .pagination a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Empêche le rechargement de la page
+                const page = this.getAttribute('data-page');
+                if (page) {
+                    loadPage(`/messagerie?page=${page}`); // Charge la page correspondante
+                }
+            });
+        });
+
+        // Interception des soumissions de formulaires
+        document.querySelectorAll('#dynamic-content form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // Empêche le rechargement de la page
+                const formData = new FormData(this);
+                const method = this.getAttribute('method')?.toUpperCase() || 'POST'; // Par défaut POST
+                const action = this.getAttribute('action');
+
+                if (method === 'GET') {
+                    // Gestion des requêtes GET
+                    const query = new URLSearchParams(formData).toString();
+                    fetch(`${action}?${query}`)
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('dynamic-content').innerHTML = html;
+                            attachDynamicListeners(); // Réattache les événements
+                        })
+                        .catch(err => console.error('Erreur lors de l’envoi du formulaire (GET) :', err));
+                } else {
+                    // Gestion des requêtes POST
+                    fetch(action, {
+                        method: method,
+                        body: formData
+                    })
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('dynamic-content').innerHTML = html;
+                            attachDynamicListeners(); // Réattache les événements
+                        })
+                        .catch(err => console.error('Erreur lors de l’envoi du formulaire (POST) :', err));
+                }
+            });
+        });
+    }
+
+    // Initialisation
+    attachDynamicListeners();
+</script>
 </body>
 </html>
