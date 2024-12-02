@@ -83,7 +83,6 @@ public class AssocierProfesseurMatiereController {
             model.addAttribute("errorMessage", "Professeur ou matière introuvable.");
             return afficherFormulaire(null, model);
         }
-
-        return "associerProfesseurMatiere"; // Rediriger vers la même page pour afficher les mises à jour
+        return "redirect:/associerProfesseurMatiere"; // Redirection vers le @GetMapping
     }
 }

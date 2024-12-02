@@ -158,6 +158,50 @@
         }
     });
 
+    // Gestionnaire d'envoi de formulaire pour la recherche d'association professeur matiere
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'gerer-association-form') {
+            e.preventDefault(); // Empêche la soumission classique
+
+            // Récupérer la valeur saisie
+            const recherche = document.getElementById('search-input').value;
+            console.log(recherche)
+            // Envoie les données à la servlet via AJAX
+            fetch('associerProfesseurMatiere?keyword=' + encodeURIComponent(recherche), {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche:', error);
+                });
+        }
+    });
+
+    // Gestionnaire d'envoi de formulaire pour la recherche d'association professeur matiere
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'reset-association-form') {
+            e.preventDefault(); // Empêche la soumission classique
+
+            // Envoie les données à la servlet via AJAX
+            fetch('associerProfesseurMatiere', {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche:', error);
+                });
+        }
+    });
 
     // Gestionnaire pour le lien "Retour à la liste" de modifier étudiant
     document.addEventListener('click', function (e) {
@@ -442,7 +486,6 @@
 
     // Fonction d'envoi de formulaire pour les boutons d'actions sur les demandes de filière
     // C'est une fonction car les évenèments ne marchaient pas !
-
     function handleFormSubmit(event, button) {
         // Empêcher la soumission normale du formulaire
         event.preventDefault();
@@ -484,6 +527,87 @@
                 console.log('Erreur:', error);
             });
     }
+
+    function handleAssocierSubmit(event) {
+        // Empêcher le comportement par défaut
+        event.preventDefault();
+
+        // Récupérer le formulaire par son nom
+        const form = document.forms['associer-profmat-form']; // Utilise le 'name' du formulaire
+
+        // Récupérer les données des champs du formulaire
+        const professeurEmail = form.querySelector('select[name="professeur_email"]').value;
+        const matiereId = form.querySelector('select[name="matiere_id"]').value;
+
+        // Afficher les valeurs dans la console pour déboguer
+        console.log("Professeur Email:", professeurEmail);
+        console.log("Matière ID:", matiereId);
+
+        // Créer l'objet FormData à partir du formulaire
+        const formData = new FormData(form);
+
+        // Envoyer les données au serveur via Fetch
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Association réussie');
+                    return response.text(); // Récupérer le HTML mis à jour
+                } else {
+                    console.log('Erreur lors de l\'association');
+                    throw new Error('Échec de la requête');
+                }
+            })
+            .then(html => {
+                // Met à jour le contenu dynamique dans le div #dynamic-content
+                document.getElementById('dynamic-content').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+    }
+
+    function handleDeleteAssocSubmit(event) {
+        // Empêcher le comportement par défaut
+        event.preventDefault();
+
+        // Trouver le formulaire lié au bouton cliqué
+        const form = event.target.closest('form'); // Récupère le formulaire parent le plus proche du bouton
+
+        // Récupérer les données des champs du formulaire
+        const assoc = form.querySelector('input[name="id"]').value;
+
+        // Afficher les valeurs dans la console pour déboguer
+        console.log("assoc ID:", assoc);
+
+        // Créer l'objet FormData à partir du formulaire
+        const formData = new FormData(form);
+
+        // Envoyer les données au serveur via Fetch
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Suppression association réussie');
+                    return response.text(); // Récupérer le HTML mis à jour
+                } else {
+                    console.log('Erreur lors de la suppression');
+                    throw new Error('Échec de la requête');
+                }
+            })
+            .then(html => {
+                // Met à jour le contenu dynamique dans le div #dynamic-content
+                document.getElementById('dynamic-content').innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+    }
+
 
 </script>
 </body>

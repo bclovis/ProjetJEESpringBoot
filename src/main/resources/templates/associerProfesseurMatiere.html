@@ -9,7 +9,7 @@
 <h1>Associer un Professeur à une Matière</h1>
 
 <!-- Formulaire pour associer un professeur et une matière -->
-<form class="form" th:action="@{/associerProfesseurMatiere}" method="post">
+<form name="associer-profmat-form" class="form" th:action="@{/associerProfesseurMatiere}" method="post">
     <div class="form-group">
         <label for="professeur">Professeur :</label>
         <select name="professeur_email" id="professeur">
@@ -32,17 +32,17 @@
     </div>
     <br>
 
-    <button type="submit" class="button">Associer</button>
+    <button type="submit" class="button" onclick="handleAssocierSubmit(event)">Associer</button>
 </form>
 
 <div class="search-bar-container">
     <!-- Barre de recherche -->
-    <form class="search-form" th:action="@{/associerProfesseurMatiere}" method="get">
-        <input type="text" name="keyword" placeholder="Rechercher prof/matière" th:value="${keyword}">
+    <form id="gerer-association-form" class="search-form" th:action="@{/associerProfesseurMatiere}" method="get">
+        <input id="search-input" type="text" name="keyword" placeholder="Rechercher prof/matière" th:value="${keyword}">
         <button type="submit" class="button">Rechercher</button>
     </form>
     <!-- Bouton pour réinitialiser la recherche -->
-    <form class="reset-form" th:action="@{/associerProfesseurMatiere}" method="get">
+    <form id="reset-association-form" class="reset-form" th:action="@{/associerProfesseurMatiere}" method="get">
         <button type="submit" class="button">Réinitialiser</button>
     </form>
 </div>
@@ -66,10 +66,10 @@
             <td th:text="${assoc.matiere.nom}"></td>
             <td>
                 <!-- Formulaire pour supprimer l'association -->
-                <form class="remove-form" th:action="@{/supprimerAssocProfMatiere}" method="post">
+                <form name="remove-association-from" class="remove-form" th:action="@{/supprimerAssocProfMatiere}" method="post">
                     <!-- Passer l'ID de l'association à supprimer -->
                     <input type="hidden" name="id" th:value="${assoc.id}"/>
-                    <button type="submit" class="button">Supprimer</button>
+                    <button type="submit" class="button" onclick="handleDeleteAssocSubmit(event)">Supprimer</button>
                 </form>
             </td>
         </tr>
@@ -77,6 +77,5 @@
     </tbody>
 </table>
 <br><br>
-<a href="admin" class="return-home">Retour à l'accueil</a>
 </body>
 </html>

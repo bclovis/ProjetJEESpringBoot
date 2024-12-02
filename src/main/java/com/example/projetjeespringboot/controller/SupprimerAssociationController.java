@@ -33,6 +33,6 @@ public class SupprimerAssociationController {
         }
 
         // Rediriger vers la page qui affiche les associations
-        return "associerProfesseurMatiere"; // Affiche de nouveau la page avec les messages
+        return "redirect:/associerProfesseurMatiere"; // Redirection vers le @GetMapping
     }
 }
