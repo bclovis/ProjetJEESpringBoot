@@ -10,8 +10,8 @@
 
 <!-- Barre de recherche -->
 <div class="search-bar">
-  <form th:action="@{/gererDemandes}" method="get">
-    <input type="text" name="recherche" placeholder="Rechercher une demande..." th:value="${recherche}"/>
+  <form id="gerer-filiere-form" th:action="@{/gererDemandes}" method="get">
+    <input type="text" id="search-input" name="recherche" placeholder="Rechercher une demande..." th:value="${recherche}"/>
     <button type="submit">Rechercher</button>
   </form>
 </div>
@@ -38,13 +38,13 @@
       <td th:text="${#dates.format(demande.dateDemande, 'dd/MM/yyyy')}">date</td>
       <td th:text="${demande.commentaireAdmin}">commentaire</td>
       <td>
-        <form th:action="@{/gererDemandes}" method="post">
+        <form name="action-demande-form" th:action="@{/gererDemandes}" method="post">
           <input type="hidden" name="demandeId" th:value="${demande.id}"/>
-          <input type="text" name="commentaire" placeholder="Commentaire admin..."/>
-          <button type="submit" name="action" value="commenter">Ajouter/Modifier le commentaire</button>
-          <button type="submit" name="action" value="accepter">Accepter</button>
-          <button type="submit" name="action" value="refuser">Refuser</button>
-          <button type="submit" name="action" value="supprimer">Supprimer</button>
+          <input type="text" name="commentaire" th:value="${demande.commentaireAdmin}" placeholder="Commentaire admin..."/>
+          <button type="submit" name="action" value="commenter" onclick="handleFormSubmit(event, this)">Ajouter/Modifier le commentaire</button>
+          <button type="submit" name="action" value="accepter" onclick="handleFormSubmit(event, this)">Accepter</button>
+          <button type="submit" name="action" value="refuser" onclick="handleFormSubmit(event, this)">Refuser</button>
+          <button type="submit" name="action" value="supprimer" onclick="handleFormSubmit(event, this)">Supprimer</button>
         </form>
       </td>
     </tr>
@@ -59,12 +59,13 @@
 
 <!-- Pagination -->
 <div class="pagination">
-  <a th:each="i : ${#numbers.sequence(1, totalPages)}"
-     th:href="@{|/gererDemandes?page=${i}&recherche=${recherche}|}"
-     th:text="${i}"
-     th:classappend="${i == currentPage} ? 'current-page'"></a>
+  <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+        <a th:href="@{/gererDemandes(page=${i}, recherche=${recherche})}"
+           th:classappend="${i == currentPage} ? 'current-page'">
+           <span th:text="${i}"></span>
+        </a>
+  </span>
 </div>
 
-<a th:href="@{/admin}" class="return-home">Retour à l'accueil</a>
 </body>
 </html>

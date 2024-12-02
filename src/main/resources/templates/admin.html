@@ -89,7 +89,6 @@
     // Gestionnaire d'envoi de formulaire pour la recherche d'étudiant
     document.addEventListener('submit', function (e) {
         const form = e.target;
-        const target = e.target;
         if (form.id === 'gerer-etudiant-form') {
             e.preventDefault(); // Empêche la soumission classique
 
@@ -135,7 +134,32 @@
         }
     });
 
-    // Gestionnaire pour le lien "Retour à la liste" de modifier étudiant et enseignant
+    // Gestionnaire d'envoi de formulaire pour la recherche de demande de filiere
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.id === 'gerer-filiere-form') {
+            e.preventDefault(); // Empêche la soumission classique
+
+            // Récupérer la valeur saisie
+            const recherche = document.getElementById('search-input').value;
+
+            // Envoie les données à la servlet via AJAX
+            fetch('gererDemandes?recherche=' + encodeURIComponent(recherche), {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la recherche:', error);
+                });
+        }
+    });
+
+
+    // Gestionnaire pour le lien "Retour à la liste" de modifier étudiant
     document.addEventListener('click', function (e) {
         const target = e.target;
         if (target.id === 'return-to-list') {
@@ -143,6 +167,27 @@
 
             // Charge la page des étudiants via AJAX
             fetch('gererEtudiants', {
+                method: 'GET',
+            })
+                .then(response => response.text())
+                .then(html => {
+                    // Injecte le contenu HTML reçu dans la zone dynamique
+                    document.getElementById('dynamic-content').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement de la liste:', error);
+                });
+        }
+    });
+
+    // Gestionnaire pour le lien "Retour à la liste" de modifier enseignant
+    document.addEventListener('click', function (e) {
+        const target = e.target;
+        if (target.id === 'return-to-list-teacher') {
+            e.preventDefault(); // Empêche le comportement par défaut du lien
+
+            // Charge la page des étudiants via AJAX
+            fetch('gererEnseignants', {
                 method: 'GET',
             })
                 .then(response => response.text())
@@ -395,6 +440,50 @@
         }
     });
 
+    // Fonction d'envoi de formulaire pour les boutons d'actions sur les demandes de filière
+    // C'est une fonction car les évenèments ne marchaient pas !
+
+    function handleFormSubmit(event, button) {
+        // Empêcher la soumission normale du formulaire
+        event.preventDefault();
+
+        // Récupérer le formulaire en fonction de son nom
+        const form = document.forms['action-demande-form'];  // Utilise le nom du formulaire ici
+
+        // Récupérer les données des champs du formulaire
+        const demandeId = form.querySelector('input[name="demandeId"]').value;
+        const commentaire = form.querySelector('input[name="commentaire"]').value;
+        const action = button.value;  // L'action correspond à la valeur du bouton cliqué
+
+        // Afficher les valeurs dans la console pour déboguer
+        console.log(demandeId, commentaire, action);
+
+        // Soumettre les données au serveur via Fetch
+        const formData = new FormData(form);
+        formData.set('action', action);  // S'assurer que l'action est correctement envoyée
+
+        // Utilisation de Fetch pour envoyer le formulaire sans recharger la page
+        fetch('/gererDemandes', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Demande traitée avec succès');
+                    return response.text();  // Récupérer le texte de la réponse (HTML)
+                } else {
+                    console.log('Erreur lors du traitement de la demande');
+                    throw new Error('Erreur lors du traitement de la demande');
+                }
+            })
+            .then(html => {
+                // Met à jour le contenu dynamique dans le div #dynamic-content
+                document.getElementById('dynamic-content').innerHTML = html;
+            })
+            .catch(error => {
+                console.log('Erreur:', error);
+            });
+    }
 
 </script>
 </body>
