@@ -114,7 +114,7 @@ public class MessageController {
         model.addAttribute("messages", messages);
         model.addAttribute("role", role);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", (int) Math.ceil((double) totalMessages / messagesPerPage));
+        model.addAttribute("totalPages", Math.max((int) Math.ceil((double) totalMessages / messagesPerPage), 1));
 
         return "messagerie"; // Nom de la vue Thymeleaf
     }
