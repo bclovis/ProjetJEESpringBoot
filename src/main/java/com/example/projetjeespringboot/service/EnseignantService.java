@@ -107,4 +107,13 @@ public class EnseignantService {
         enseignantRepository.deleteById(email);
     }
 
+    // Méthode pour récupérer tous les enseignants
+    public List<Enseignant> findAll() {
+        return enseignantRepository.findAll();
+    }
+
+    // Méthode pour trouver un enseignant par son email
+    public Enseignant findByEmail(String email) {
+        return enseignantRepository.findByEmail(email);
+    }
 }

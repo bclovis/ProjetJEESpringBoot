@@ -29,19 +29,71 @@ public class EmploiDuTemps {
     private int semaineDebut;
     private int semaineFin;
 
-    public String getJour(){
+    public Matiere getMatiere() {
+        return matiere;
+    }
+
+    public void setMatiere(Matiere matiere) {
+        this.matiere = matiere;
+    }
+
+    public Filiere getFiliere() {
+        return filiere;
+    }
+
+    public void setFiliere(Filiere filiere) {
+        this.filiere = filiere; // Setter pour l'attribution de la Filière
+    }
+
+    public int getSemestre() {
+        return semestre;
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public void setSemestre(int semestre) {
+        this.semestre = semestre;
+    }
+
+    public Enseignant getProfesseur() {
+        return professeur;
+    }
+
+    public void setProfesseur(Enseignant professeur) {
+        this.professeur = professeur;
+    }
+
+    public String getJour() {
         return jour;
     }
 
-    public Matiere getMatiere() {
-        return matiere;
+    public void setJour(String jour) {
+        this.jour = jour;
     }
 
     public String getHeure() {
         return heure;
     }
 
-    public Enseignant getProfesseur(){
-        return professeur;
+    public void setHeure(String heure) {
+        this.heure = heure;
+    }
+
+    public int getSemaineDebut() {
+        return semaineDebut;
+    }
+
+    public void setSemaineDebut(int semaineDebut) {
+        this.semaineDebut = semaineDebut;
+    }
+
+    public int getSemaineFin() {
+        return semaineFin;
+    }
+
+    public void setSemaineFin(int semaineFin) {
+        this.semaineFin = semaineFin;
     }
 }
